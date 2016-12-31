@@ -19,8 +19,8 @@
   (routes
     (-> #'home-routes
 ;;        (wrap-routes middleware/wrap-csrf)
-        wrap-json-response
-        (wrap-cors :access-control-allow-origin [#"http://localhost:3000" #"http://.*"]
+;;        wrap-json-response
+        (wrap-cors :access-control-allow-origin [#"http://localhost:3000" #"http://.*" #"https://.*"]
                    :access-control-allow-methods [:get :put :post :delete])
         (wrap-defaults api-defaults)
         (wrap-json-params)
