@@ -3,6 +3,7 @@
             [luminus.repl-server :as repl]
             [luminus.http-server :as http]
             [dv.config :refer [env]]
+            [dv.db.common :as db-common]
             [clojure.tools.cli :refer [parse-opts]]
             [clojure.tools.logging :as log]
             [mount.core :as mount])
@@ -46,4 +47,5 @@
   (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)))
 
 (defn -main [& args]
+  (db-common/migrate)
   (start-app args))
