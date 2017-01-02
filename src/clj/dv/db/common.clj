@@ -1,9 +1,11 @@
 (ns dv.db.common
-  (:import (com.mchange.v2.c3p0 ComboPooledDataSource))
+  (:import (com.mchange.v2.c3p0 ComboPooledDataSource)
+           (java.util UUID))
   (:require [to-jdbc-uri.core :refer [to-jdbc-uri]]
+            [clojure.spec :as s]
             [clojure.java.jdbc :as j]))
 
-(defn has-db-url? [] (some? (System/getenv "DATABASE_URL")))
+(defn- has-db-url? [] (some? (System/getenv "DATABASE_URL")))
 
 (def db-spec
   {
@@ -38,18 +40,18 @@
      [
       [:strs_id "int" "NOT NULL"]
       [:owner_type "varchar(50)" "NOT NULL"]
-      [:name "varchar(50)" "NOT NULL"]
+      [:strs_name "varchar(50)" "NOT NULL"]
       [:cardinality "int" "NOT NULL"]
       [:optional "int" "NOT NULL"]
       [:notes "varchar(50)"]
       [:constraint " PK_strs_meta PRIMARY KEY(strs_id)"]
-      [:constraint " UC_strs_meta UNIQUE (owner_type, name)"]])))
+      [:constraint " UC_strs_meta UNIQUE (owner_type, strs_name)"]])))
 
 (defn- create-schema-strs [db]
   (j/db-do-commands db
     (j/create-table-ddl
      :strs [
-            [:owner_id "int" "NOT NULL"]
+            [:owner_id "char(32)" "NOT NULL"]
             [:strs_id "int" "NOT NULL"]
             [:str_id "int" "NOT NULL"]
             [:str "varchar(4096)"]
@@ -66,7 +68,7 @@
   (j/db-do-commands db
       (j/create-table-ddl
        :auth [
-              [:auth_id "int" "NOT NULL"]
+              [:auth_id "char(32)" "NOT NULL"]
               [:auth_name "varchar(64)" "NOT NULL"]
               [:constraint " PK_auth PRIMARY KEY(auth_id) "]])))
 
@@ -75,34 +77,111 @@
     (j/create-table-ddl
      :auth_enc
      [
-           [:auth_id "varchar(64)" "NOT NULL"]
+           [:auth_id "char(32)" "NOT NULL"]
            [:begin_ymd "int" "NOT NULL"]
            [:enc_id "int" "NOT NULL"]
            [:constraint " PK_auth_enc PRIMARY KEY(auth_id, begin_ymd)"]])))
 
-(defn has-table? [db table-name]
+(defn- has-table? [db table-name]
   (let [sql (str "select count(*) as count from information_schema.tables where table_name = '" table-name "'")
         results (j/query db [sql])]
     (pos? (:count (first results)))))
 
-(defn db-inited? [db]
-  (let [sql (str "select count(*) as count from strs_meta where strs_id = 1")
+(defn- drop-schema [db table-name]
+  (j/db-do-commands db (j/drop-table-ddl table-name)))
+
+(defn- drop-schemas [db]
+  (doseq [table-name ["auth" "enc" "auth_enc" "strs_meta" "strs"]]
+    (if (has-table? db table-name) (drop-schema db table-name))))
+
+(defn- db-inited? [db]
+  (let [sql "select count(*) as count from strs_meta where strs_id = 1"
         results (j/query db [sql])]
     (pos? (:count (first results)))))
 
-(defn init-db [db]
+(defn- init-db [db]
   (let [inited? (db-inited? db)]
     (when-not inited?
-      (doall (map (fn [sql] (j/execute! db sql))
+      (doall (map (fn [sql] (j/execute! db [sql]))
                   ["insert into enc (enc_id, notes) values (1, 'test')"
-                   "insert into strs_meta (strs_id, owner_type, name, cardinality, optional, notes) values (1, 'auth', 'password', 1, 0, 'password')"])))))
-
+                   "insert into strs_meta (strs_id, owner_type, strs_name, cardinality, optional, notes) values (1, 'auth', 'password', 1, 0, 'password')"])))))
 
 (defn migrate []
   (let [db (db-pool)]
+;    (drop-schemas db)
     (when-not (has-table? db "auth") (create-schema-auth db))
     (when-not (has-table? db "enc") (create-schema-enc db))
     (when-not (has-table? db "auth_enc") (create-schema-auth-enc db))
     (when-not (has-table? db "strs_meta") (create-schema-strs-meta db))
     (when-not (has-table? db "strs") (create-schema-strs db))
     (init-db db)))
+
+(defn- get-strs-meta [db owner-type strs-name]
+  (let [sql-0 "select strs_id, owner_type, strs_name, cardinality, optional, notes from strs_meta "
+        sql-1 (if (not-any? some? [owner-type strs-name]) "" " where ")
+        sql-2 (if (some? owner-type) " owner_type = ? " "")
+        sql-3 (if (every? some? [owner-type strs-name]) " and " "")
+        sql-4 (if (some? strs-name) " strs_name = ? " "")
+        sql (str sql-0 sql-1 sql-2 sql-3 sql-4)
+        params (filter some? [owner-type strs-name])
+        results (j/query db (into [] (concat [sql] params)))]
+    results))
+
+(defn- get-strs-id [db owner-type strs-name]
+  {:pre [(s/valid? string? owner-type) (s/valid? string? strs-name)]}
+  (:strs_id (first (get-strs-meta db owner-type strs-name))))
+
+(defn- get-password-strs-id [db] (get-strs-id "auth" "password"))
+
+(defn- get-strs [db owner-id strs-id]
+  {:pre [(s/valid? string? owner-id) (s/valid? int? strs-id)]}
+  (let [sql "select str_id, str from strs where owner_id = ? and strs_id = ?"
+        results (j/query db [sql owner-id strs-id])]
+    results))
+
+(defn- get-auth-id [db auth-name]
+  {:pre (s/valid? string? auth-name)}
+  (let [sql "select auth_id from auth where auth_name = ?"
+        results (j/query db [sql auth-name])]
+    (:auth_id (first results))))
+
+(defn- valid-auth? [db auth-name password]
+  {:pre [(s/valid? string? auth-name) (s/valid? string? password)]}
+  (let [auth-id (get-auth-id db auth-name)]
+    (if (nil? auth-id) false
+      (let [pw-strs-id (get-password-strs-id db)
+            strs (get-strs db auth-id pw-strs-id)
+            found-pw (:str (first strs))]
+        (= password found-pw)))))
+
+(defn- save-strs [db owner-id strs-id strs]
+  {:pre [(s/valid? string? owner-id) (s/valid? int? strs-id)]}
+  (j/execute! db ["delete from strs where owner_id = ? and  strs_id = ?" owner-id strs-id])
+  (if (seq strs)
+    (doall (map-indexed
+            (fn [idx item]
+              (j/insert! db :strs {:owner_id owner-id :strs_id strs-id :str_id idx :str item}))
+            strs))))
+
+(defn new-uuid []
+  (let [uuid-obj (UUID/randomUUID)
+        uuid-str (.toString uuid-obj)
+        str0 (.substring uuid-str 0 8)
+        str1 (.substring uuid-str 9 13)
+        str2 (.substring uuid-str 14 18)
+        str3 (.substring uuid-str 19 23)
+        str4 (.substring uuid-str 24)]
+    (str str0 str1 str2 str3 str4)))
+
+(defn- exists-auth [db auth-name]
+  {:pre [(s/valid? string? auth-name)]}
+  (let [curr-auths (j/query db ["select * from auth where auth_name = ?" auth-name])]
+    (seq curr-auths)))
+
+(defn- add-auth [db auth-name password]
+  {:pre [(s/valid? string? auth-name) (s/valid? string? password)]}
+  (let [
+        uuid (new-uuid)
+        pw-strs-id (get-password-strs-id db)]
+    (j/insert! db :auth {:auth_id uuid :auth_name auth-name})
+    (save-strs db uuid pw-strs-id [password])))

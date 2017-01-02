@@ -1,5 +1,9 @@
 # dv
 TODO:
+use uuid instead of int as ids to simplify new id generation
+finish funcs needed for auth creation, validation,
+pages for registering.
+
 A key-value data viewer
 Future: Do I need facebook/graphql? If I do, make it work.
 
