@@ -1,17 +1,16 @@
 (ns dv.db.common
   (:import (com.mchange.v2.c3p0 ComboPooledDataSource))
-  (:require [clojure.java.jdbc :as j]))
+  (:require [to-jdbc-uri.core :refer [to-jdbc-uri]]
+            [clojure.java.jdbc :as j]))
 
 (defn has-db-url? [] (some? (System/getenv "DATABASE_URL")))
 
 (def db-spec
   {
-   :url (System/getenv "DATABASE_URL")
-   :classname "org.postgresql.Driver"})
+   :url (System/getenv "DATABASE_URL")})
 
 (def local-db-spec
   {
-     :classname "org.postgresql.Driver"
      :url "postgresql://localhost:5432/pm"
      :user "pm"
      :password "pm_pw"})
@@ -19,15 +18,15 @@
 (defn db-pool
   []
   (let [cpds0 (doto (ComboPooledDataSource.)
-                    (.setDriverClass (:classname db-spec))
+                    (.setDriverClass "org.postgresql.Driver")
                     (.setMaxIdleTimeExcessConnections (* 5 60))
                ;; expire connections after 20 minutes of inactivity:
                     (.setMaxIdleTime (* 20 60)))
         cpds (if (has-db-url?)
                (doto cpds0
-                     (.setJdbcUrl (str "jdbc:" (:url db-spec))))
+                     (.setJdbcUrl (to-jdbc-uri (:url db-spec))))
                (doto cpds0
-                     (.setJdbcUrl (str "jdbc:" (:url local-db-spec)))
+                     (.setJdbcUrl (to-jdbc-uri (:url local-db-spec)))
                      (.setUser (:user local-db-spec))
                      (.setPassword (:password local-db-spec))))]
     {:datasource cpds}))
