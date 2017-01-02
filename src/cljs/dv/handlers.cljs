@@ -16,3 +16,8 @@
   :set-docs
   (fn [db [_ docs]]
     (assoc db :docs docs)))
+
+(reg-event-db
+  :set-pm
+  (fn [db [_ pm]]
+    (assoc db :pm pm)))

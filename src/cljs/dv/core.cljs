@@ -29,13 +29,31 @@
       [:a.navbar-brand {:href "#/"} "dv"]
       [:ul.nav.navbar-nav
        [nav-link "#/" "Home" :home collapsed?]
+       [nav-link "#/pm" "My stuff" :pm collapsed?]
        [nav-link "#/about" "About" :about collapsed?]]]]))
 
 (defn about-page []
   [:div.container
    [:div.row
     [:div.col-md-12
-     "this is the story of dv... work in progress"]]])
+     "this is the story of pm... work in progress"]]])
+
+(defn pm-login []
+  [:div.container
+   [:div.row
+    [:div.col-md-12
+     "login or register... work in progress"]]])
+
+(defn pm-data []
+  [:div.container
+   [:div.row
+    [:div.col-md-12
+     "this is my stuff... work in progress"]]])
+
+(defn pm-page []
+  (if-let [pm-auth @(rf/subscribe [:pm-auth])]
+    [pm-data]
+    [pm-login]))
 
 (defn home-page []
   [:div.container
@@ -46,6 +64,7 @@
 
 (def pages
   {:home #'home-page
+   :pm #'pm-page
    :about #'about-page})
 
 (defn page []
@@ -59,6 +78,9 @@
 
 (secretary/defroute "/" []
   (rf/dispatch [:set-active-page :home]))
+
+(secretary/defroute "/pm" []
+  (rf/dispatch [:set-active-page :pm]))
 
 (secretary/defroute "/about" []
   (rf/dispatch [:set-active-page :about]))
