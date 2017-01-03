@@ -63,8 +63,29 @@
    [:div.row
     [:div.col-md-2]
     [:div.col-md-2
-     [:button {:on-click #(rf/dispatch [:auth-login])
-               :type "button"} "Login"]]]])
+     [:button {:on-click #(rf/dispatch [:auth-login]) :type "button" } "Login"]]]
+
+   [:div.row
+    [:div.col-md-4 "Don't have an account? please "
+     [:a.pointer {:on-click #(rf/dispatch [:auth-set-registering true])} "register"]]]])
+
+(defn pm-register [pm-auth]
+  [:div.container
+   [:div.row [:div.col-md-2 "Email address: "]
+    [:div.col-md-4 [text-input :auth-set-name "text" (:auth-name pm-auth)]]]
+   [:div.row [:div.col-md-2 "Password: "]
+    [:div.col-md-4
+     [text-input :auth-set-password "password" (:password pm-auth)]]]
+   [:div.row
+    [:div.col-md-2]
+    [:div.col-md-2
+     [:button {:on-click #(rf/dispatch [:auth-register]) :type "button" } "Register"]]]
+
+   [:div.row
+    [:div.col-md-4 "Please click the link as instructed in the confirmation email after registration"]]
+   [:div.row
+    [:div.col-md-4 "Already have an account? please "
+     [:a.pointer {:on-click #(rf/dispatch [:auth-set-registering false])} "login"]]]])
 
 (defn pm-data []
   [:div.container
@@ -74,7 +95,10 @@
 
 (defn pm-page []
   (let [pm-auth @(rf/subscribe [:pm-auth])]
-    (if (:login pm-auth) [pm-data] [pm-login pm-auth])))
+    (cond
+      (:login pm-auth) [pm-data]
+      (:registering pm-auth) [pm-register]
+      :else [pm-login])))
 
 (defn home-page []
   [:div.container

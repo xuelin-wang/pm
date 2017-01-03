@@ -19,5 +19,17 @@
 (reg-event-db
  :auth-login
  []
- (fn [db _]
+ (fn [db [id email password]]
    (update-in db [:pm :auth :login] (constantly true))))
+
+(reg-event-db
+ :auth-register
+ []
+ (fn [db [id email password]]
+   (update-in db [:pm :auth :login] (constantly true))))
+
+(reg-event-db
+ :auth-set-registering
+ []
+ (fn [db [id registering]]
+   (update-in db [:pm :auth :registering] (constantly registering))))

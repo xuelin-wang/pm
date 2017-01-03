@@ -413,3 +413,135 @@ notifying browser that file changed:  out/dv/core.js
 [0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
 [32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.566 seconds.[0m
 notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:80  column:14  ----[0m
+
+  [1mUse of undeclared Var dv.core/pm-register[0m
+
+  [36m76[0m  [36m  (let [pm-auth @(rf/subscribe [:pm-auth])][0m
+  [36m77[0m  [36m    (cond[0m
+  [36m78[0m  [36m      (:login pm-auth) [pm-data][0m
+  [36m79[0m  [36m      (:register pm-auth) [pm-login][0m
+  [33m80[0m  [1m      :else [pm-register])))[0m
+  [0m  [0m  [33m             ^--- Use of undeclared Var dv.core/pm-register[0m
+  [36m81[0m  [36m[0m
+  [36m82[0m  [36m(defn home-page [][0m
+  [36m83[0m  [36m  [:div.container[0m
+  [36m84[0m  [36m   (when-let [docs @(rf/subscribe [:docs])][0m
+  [36m85[0m  [36m     [:div.row>div.col-sm-12[0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.963 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:83  column:14  ----[0m
+
+  [1mUse of undeclared Var dv.core/pm-register[0m
+
+  [36m79[0m  [36m  (let [pm-auth @(rf/subscribe [:pm-auth])][0m
+  [36m80[0m  [36m    (cond[0m
+  [36m81[0m  [36m      (:login pm-auth) [pm-data][0m
+  [36m82[0m  [36m      (:register pm-auth) [pm-login][0m
+  [33m83[0m  [1m      :else [pm-register])))[0m
+  [0m  [0m  [33m             ^--- Use of undeclared Var dv.core/pm-register[0m
+  [36m84[0m  [36m[0m
+  [36m85[0m  [36m(defn home-page [][0m
+  [36m86[0m  [36m  [:div.container[0m
+  [36m87[0m  [36m   (when-let [docs @(rf/subscribe [:docs])][0m
+  [36m88[0m  [36m     [:div.row>div.col-sm-12[0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.043 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.98 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.002 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.051 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.187 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.843 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.673 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.932 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.763 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.874 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.403 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/events.cljs   line:33  column:3  ----[0m
+
+  [1mUse of undeclared Var dv.events/registering[0m
+
+  [36m29[0m  [36m   (update-in db [:pm :auth :login] (constantly true))))[0m
+  [36m30[0m  [36m[0m
+  [36m31[0m  [36m(reg-event-db[0m
+  [36m32[0m  [36m :auth-set-registering[0m
+  [33m33[0m  [1m [registering][0m
+  [0m  [0m  [33m  ^--- Use of undeclared Var dv.events/registering[0m
+  [36m34[0m  [36m (fn [db _][0m
+  [36m35[0m  [36m   (update-in db [:pm :auth :registering] (constantly registering))))[0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/events.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/dv/events.cljs   line:35  column:55  ----[0m
+
+  [1mUse of undeclared Var dv.events/registering[0m
+
+  [36m31[0m  [36m(reg-event-db[0m
+  [36m32[0m  [36m :auth-set-registering[0m
+  [36m33[0m  [36m [registering][0m
+  [36m34[0m  [36m (fn [db _][0m
+  [33m35[0m  [1m   (update-in db [:pm :auth :registering] (constantly registering))))[0m
+  [0m  [0m  [33m                                                      ^--- Use of undeclared Var dv.events/registering[0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/events.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.081 seconds.[0m
+notifying browser that file changed:  out/dv/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.212 seconds.[0m
+notifying browser that file changed:  out/dv/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.107 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.978 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.318 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.982 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.203 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.26 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+Notifyng browser that CSS file changed: resources/public/css/screen.css
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.654 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.756 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+Notifyng browser that CSS file changed: resources/public/css/screen.css
+Notifyng browser that CSS file changed: resources/public/css/screen.css
+Notifyng browser that CSS file changed: resources/public/css/screen.css

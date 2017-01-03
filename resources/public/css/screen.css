@@ -18,6 +18,12 @@ body {
 .navbar-nav .nav-link + .nav-link {
   margin-left: 0;
 }
+
+.pointer {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 @media (min-width: 34em) {
   .navbar-brand {
     float: left;
@@ -66,4 +72,3 @@ body {
         transform: rotate(360deg);
     }
 }
-
