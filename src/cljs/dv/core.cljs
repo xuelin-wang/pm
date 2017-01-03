@@ -7,6 +7,7 @@
             [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]]
             [dv.ajax :refer [load-interceptors!]]
+            [dv.events]
             [dv.handlers]
             [dv.subscriptions])
   (:import goog.History))
@@ -38,11 +39,32 @@
     [:div.col-md-12
      "this is the story of pm... work in progress"]]])
 
-(defn pm-login []
+(defn- text-input [event-id input-type init-val]
+  (let [val (r/atom init-val)
+        stop #(reset! val init-val)
+        save #(rf/dispatch [event-id @val])]
+    [:input {:type input-type
+             :auto-focus true
+             :default-value init-val
+             :on-blur save
+             :on-change #(reset! val (-> % .-target .-value))
+             :on-key-down #(case (.-which %)
+                             13 (save)
+                             27 (stop)
+                             nil)}]))
+
+(defn pm-login [pm-auth]
   [:div.container
+   [:div.row [:div.col-md-2 "Email address: "]
+    [:div.col-md-4 [text-input :auth-set-name "text" (:auth-name pm-auth)]]]
+   [:div.row [:div.col-md-2 "Password: "]
+    [:div.col-md-4
+     [text-input :auth-set-password "password" (:password pm-auth)]]]
    [:div.row
-    [:div.col-md-12
-     "login or register... work in progress"]]])
+    [:div.col-md-2]
+    [:div.col-md-2
+     [:button {:on-click #(rf/dispatch [:auth-login])
+               :type "button"} "Login"]]]])
 
 (defn pm-data []
   [:div.container
@@ -51,9 +73,8 @@
      "this is my stuff... work in progress"]]])
 
 (defn pm-page []
-  (if-let [pm-auth @(rf/subscribe [:pm-auth])]
-    [pm-data]
-    [pm-login]))
+  (let [pm-auth @(rf/subscribe [:pm-auth])]
+    (if (:login pm-auth) [pm-data] [pm-login pm-auth])))
 
 (defn home-page []
   [:div.container

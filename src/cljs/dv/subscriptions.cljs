@@ -19,4 +19,4 @@
 (reg-sub
   :pm-auth
   (fn [db _]
-    (:auth (:pm db))))
+    (get-in db [:pm :auth])))
