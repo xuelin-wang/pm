@@ -545,3 +545,458 @@ notifying browser that file changed:  out/dv/core.js
 Notifyng browser that CSS file changed: resources/public/css/screen.css
 Notifyng browser that CSS file changed: resources/public/css/screen.css
 Notifyng browser that CSS file changed: resources/public/css/screen.css
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.624 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/dv/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.072 seconds.[0m
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.848 seconds.[0m
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/handlers.cljs   line:45  column:6  ----[0m
+
+  [1mWrong number of args (2) passed to cljs.core/update-in[0m
+
+  [36m41[0m  [36m [][0m
+  [36m42[0m  [36m (fn [db [id email password]][0m
+  [36m43[0m  [36m   (update-in db [:pm :auth :login] (constantly true))[0m
+  [36m44[0m  [36m   (let [lists (map (fn [ii] {:name (str "name " ii) :value (str "value " ii)}))][0m
+  [33m45[0m  [1m     (update-in db [:pm :data :lists lists]))))[0m
+  [0m  [0m  [33m     ^--- Wrong number of args (2) passed to cljs.core/update-in[0m
+  [36m46[0m  [36m[0m
+  [36m47[0m  [36m(reg-event-db[0m
+  [36m48[0m  [36m :auth-register[0m
+  [36m49[0m  [36m [][0m
+  [36m50[0m  [36m (fn [db [id email password]][0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/handlers.cljs  ----[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 2.217 seconds.[0m
+[36m----  Could not Analyze  src/cljs/dv/core.cljs  ----[0m
+
+  [1mNo such namespace: dv.events, could not locate dv/events.cljs, dv/events.cljc, or Closure namespace "dv.events" [0m
+
+[36m----  Analysis Error : Please see src/cljs/dv/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.883 seconds.[0m
+[36m----  Could not Analyze  src/cljs/dv/core.cljs  ----[0m
+
+  [1mNo such namespace: dv.events, could not locate dv/events.cljs, dv/events.cljc, or Closure namespace "dv.events" [0m
+
+[36m----  Analysis Error : Please see src/cljs/dv/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.25 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.729 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/dv/subscriptions.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.391 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.175 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 6.147 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.078 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.456 seconds.[0m
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.359 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.252 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.985 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.161 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.33 seconds.[0m
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.193 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.901 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.663 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.375 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.545 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.191 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.804 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.568 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.905 seconds.[0m
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.176 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.25 seconds.[0m
+[36m----  Could not Read  src/cljs/dv/core.cljs   line:95  column:35  ----[0m
+
+  [1mNested #()s are not allowed[0m
+
+  [36m93[0m  [36mfiltered-lists (filter[0m
+  [36m94[0m  [36m                #(some (map[0m
+  [33m95[0m  [1m                        #(nat-int? (.indexOf % filter-str))[0m
+  [0m  [0m  [33m                          ^--- Nested #()s are not allowed[0m
+  [36m96[0m  [36m                        [(:name %) (:value %)]))[0m
+  [36m97[0m  [36m                (:lists pm-data))[0m
+  [36m98[0m  [36mrows (map[0m
+
+[36m----  Reader Error : Please see src/cljs/dv/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.337 seconds.[0m
+[36m----  Could not Read  src/cljs/dv/core.cljs   line:97  column:38  ----[0m
+
+  [1mNested #()s are not allowed[0m
+
+  [36m95[0m  [36mpm-data-list[0m
+  [36m96[0m  [36m(filter #(some (map)[0m
+  [33m97[0m  [1m          #(nat-int? (.indexOf % filter-str))[0m
+  [0m  [0m  [33m            ^--- Nested #()s are not allowed[0m
+  [36m98[0m  [36m          [(:name %) (:value %)])[0m
+  [36m99[0m  [36m        pm-data-list))[0m
+
+[36m----  Reader Error : Please see src/cljs/dv/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 0.567 seconds.[0m
+[36m----  Could not Read  src/cljs/dv/core.cljs   line:97  column:38  ----[0m
+
+  [1mNested #()s are not allowed[0m
+
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter #(some (map)[0m
+  [33m 97[0m  [1m                           #(nat-int? (.indexOf % filter-str))[0m
+  [0m   [0m  [33m                             ^--- Nested #()s are not allowed[0m
+  [36m 98[0m  [36m                           [(:name %) (:value %)])[0m
+  [36m 99[0m  [36m                         pm-data-list))[0m
+  [36m100[0m  [36mrows (map[0m
+
+[36m----  Reader Error : Please see src/cljs/dv/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 0.913 seconds.[0m
+[36m----  Could not Read  src/cljs/dv/core.cljs   line:97  column:38  ----[0m
+
+  [1mNested #()s are not allowed[0m
+
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter #(some (map)[0m
+  [33m 97[0m  [1m                           #(nat-int? (.indexOf % filter-str))[0m
+  [0m   [0m  [33m                             ^--- Nested #()s are not allowed[0m
+  [36m 98[0m  [36m                           [(:name %) (:value %)])[0m
+  [36m 99[0m  [36m                         pm-data-list))[0m
+  [36m100[0m  [36mrows (map[0m
+
+[36m----  Reader Error : Please see src/cljs/dv/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 0.68 seconds.[0m
+[36m----  Could not Read  src/cljs/dv/core.cljs   line:97  column:38  ----[0m
+
+  [1mNested #()s are not allowed[0m
+
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter #(some (map)[0m
+  [33m 97[0m  [1m                           #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))[0m
+  [0m   [0m  [33m                             ^--- Nested #()s are not allowed[0m
+  [36m 98[0m  [36m                           [(:name %) (:value %)])[0m
+  [36m 99[0m  [36m                         pm-data-list))[0m
+  [36m100[0m  [36mrows (map[0m
+
+[36m----  Reader Error : Please see src/cljs/dv/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 0.585 seconds.[0m
+[36m----  Could not Read  src/cljs/dv/core.cljs   line:97  column:38  ----[0m
+
+  [1mNested #()s are not allowed[0m
+
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter #(some (map)[0m
+  [33m 97[0m  [1m                           #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))[0m
+  [0m   [0m  [33m                             ^--- Nested #()s are not allowed[0m
+  [36m 98[0m  [36m                           [(:name %) (:value %)])[0m
+  [36m 99[0m  [36m                         pm-data-list))[0m
+  [36m100[0m  [36mrows (map[0m
+
+[36m----  Reader Error : Please see src/cljs/dv/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:97  column:36  ----[0m
+
+  [1mWrong number of args (3) passed to cljs.core/some[0m
+
+  [36m 93[0m  [36mpm-data-list (:list pm-data)[0m
+  [36m 94[0m  [36mfiltered-lists (if (clojure.string/blank? filter-str)[0m
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter (fn [nv][0m
+  [33m 97[0m  [1m                           (some (map)[0m
+  [0m   [0m  [33m                           ^--- Wrong number of args (3) passed to cljs.core/some[0m
+  [36m 98[0m  [36m                              #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))[0m
+  [36m 99[0m  [36m                              [(:name nv) (:value nv)]))[0m
+  [36m100[0m  [36m                         pm-data-list))[0m
+  [36m101[0m  [36mrows (map[0m
+  [36m102[0m  [36m      (fn [item][0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:97  column:42  ----[0m
+
+  [1mWrong number of args (0) passed to cljs.core/map[0m
+
+  [36m 93[0m  [36mpm-data-list (:list pm-data)[0m
+  [36m 94[0m  [36mfiltered-lists (if (clojure.string/blank? filter-str)[0m
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter (fn [nv][0m
+  [33m 97[0m  [1m                           (some (map)[0m
+  [0m   [0m  [33m                                 ^--- Wrong number of args (0) passed to cljs.core/map[0m
+  [36m 98[0m  [36m                              #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))[0m
+  [36m 99[0m  [36m                              [(:name nv) (:value nv)]))[0m
+  [36m100[0m  [36m                         pm-data-list))[0m
+  [36m101[0m  [36mrows (map[0m
+  [36m102[0m  [36m      (fn [item][0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.558 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:97  column:36  ----[0m
+
+  [1mWrong number of args (3) passed to cljs.core/some[0m
+
+  [36m 93[0m  [36mpm-data-list (:list pm-data)[0m
+  [36m 94[0m  [36mfiltered-lists (if (clojure.string/blank? filter-str)[0m
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter (fn [nv][0m
+  [33m 97[0m  [1m                           (some (map)[0m
+  [0m   [0m  [33m                           ^--- Wrong number of args (3) passed to cljs.core/some[0m
+  [36m 98[0m  [36m                              #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))[0m
+  [36m 99[0m  [36m                              [(:name nv) (:value nv)]))[0m
+  [36m100[0m  [36m                         pm-data-list))[0m
+  [36m101[0m  [36mrows (map[0m
+  [36m102[0m  [36m      (fn [item][0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:97  column:42  ----[0m
+
+  [1mWrong number of args (0) passed to cljs.core/map[0m
+
+  [36m 93[0m  [36mpm-data-list (:list pm-data)[0m
+  [36m 94[0m  [36mfiltered-lists (if (clojure.string/blank? filter-str)[0m
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter (fn [nv][0m
+  [33m 97[0m  [1m                           (some (map)[0m
+  [0m   [0m  [33m                                 ^--- Wrong number of args (0) passed to cljs.core/map[0m
+  [36m 98[0m  [36m                              #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))[0m
+  [36m 99[0m  [36m                              [(:name nv) (:value nv)]))[0m
+  [36m100[0m  [36m                         pm-data-list))[0m
+  [36m101[0m  [36mrows (map[0m
+  [36m102[0m  [36m      (fn [item][0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.855 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:97  column:36  ----[0m
+
+  [1mWrong number of args (1) passed to cljs.core/some[0m
+
+  [36m 93[0m  [36mpm-data-list (:list pm-data)[0m
+  [36m 94[0m  [36mfiltered-lists (if (clojure.string/blank? filter-str)[0m
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter (fn [nv][0m
+  [33m 97[0m  [1m                           (some (map[0m
+  [0m   [0m  [33m                           ^--- Wrong number of args (1) passed to cljs.core/some[0m
+  [36m 98[0m  [36m                                  #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))[0m
+  [36m 99[0m  [36m                                  [(:name nv) (:value nv)])))[0m
+  [36m100[0m  [36m                         pm-data-list))[0m
+  [36m101[0m  [36mrows (map[0m
+  [36m102[0m  [36m      (fn [item][0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.998 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:97  column:36  ----[0m
+
+  [1mWrong number of args (4) passed to cljs.core/some[0m
+
+  [36m 93[0m  [36mpm-data-list (:list pm-data)[0m
+  [36m 94[0m  [36mfiltered-lists (if (clojure.string/blank? filter-str)[0m
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter (fn [nv][0m
+  [33m 97[0m  [1m                           (some true? (map)[0m
+  [0m   [0m  [33m                           ^--- Wrong number of args (4) passed to cljs.core/some[0m
+  [36m 98[0m  [36m                                  #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))[0m
+  [36m 99[0m  [36m                                  [(:name nv) (:value nv)]))[0m
+  [36m100[0m  [36m                         pm-data-list))[0m
+  [36m101[0m  [36mrows (map[0m
+  [36m102[0m  [36m      (fn [item][0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:97  column:48  ----[0m
+
+  [1mWrong number of args (0) passed to cljs.core/map[0m
+
+  [36m 93[0m  [36mpm-data-list (:list pm-data)[0m
+  [36m 94[0m  [36mfiltered-lists (if (clojure.string/blank? filter-str)[0m
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter (fn [nv][0m
+  [33m 97[0m  [1m                           (some true? (map)[0m
+  [0m   [0m  [33m                                       ^--- Wrong number of args (0) passed to cljs.core/map[0m
+  [36m 98[0m  [36m                                  #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))[0m
+  [36m 99[0m  [36m                                  [(:name nv) (:value nv)]))[0m
+  [36m100[0m  [36m                         pm-data-list))[0m
+  [36m101[0m  [36mrows (map[0m
+  [36m102[0m  [36m      (fn [item][0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.436 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:97  column:36  ----[0m
+
+  [1mWrong number of args (1) passed to cljs.core/some[0m
+
+  [36m 93[0m  [36mpm-data-list (:list pm-data)[0m
+  [36m 94[0m  [36mfiltered-lists (if (clojure.string/blank? filter-str)[0m
+  [36m 95[0m  [36m                 pm-data-list[0m
+  [36m 96[0m  [36m                 (filter (fn [nv][0m
+  [33m 97[0m  [1m                           (some (map[0m
+  [0m   [0m  [33m                           ^--- Wrong number of args (1) passed to cljs.core/some[0m
+  [36m 98[0m  [36m                                  #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))[0m
+  [36m 99[0m  [36m                                  [(:name nv) (:value nv)])))[0m
+  [36m100[0m  [36m                         pm-data-list))[0m
+  [36m101[0m  [36mrows (map[0m
+  [36m102[0m  [36m      (fn [item][0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.817 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.701 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.271 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:107  column:15  ----[0m
+
+  [1mUse of undeclared Var dv.core/pm-data-lists[0m
+
+  [36m103[0m  [36m                                 pm-data-list))[0m
+  [36m104[0m  [36m        rows (map[0m
+  [36m105[0m  [36m              (fn [item][0m
+  [36m106[0m  [36m                [:div.row [:div.col-md-2 (:name item)] [:div.col-md-4 (:value item)]])[0m
+  [33m107[0m  [1m              pm-data-lists)][0m
+  [0m   [0m  [33m              ^--- Use of undeclared Var dv.core/pm-data-lists[0m
+  [36m108[0m  [36m    (into [] (cons :div.container rows))))[0m
+  [36m109[0m  [36m[0m
+  [36m110[0m  [36m(defn pm-page [][0m
+  [36m111[0m  [36m  (let [pm-auth @(rf/subscribe [:pm-auth])][0m
+  [36m112[0m  [36m    (cond[0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.226 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.732 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.76 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.425 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.888 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.006 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.089 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.809 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.984 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.672 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:106  column:15  ----[0m
+
+  [1mUse of undeclared Var dv.core/filtered-data-list[0m
+
+  [36m102[0m  [36m                                 pm-data-list))[0m
+  [36m103[0m  [36m        rows (map[0m
+  [36m104[0m  [36m              (fn [item][0m
+  [36m105[0m  [36m                [:div.row [:div.col-md-2 (:name item)] [:div.col-md-4 (:value item)]])[0m
+  [33m106[0m  [1m              filtered-data-list)][0m
+  [0m   [0m  [33m              ^--- Use of undeclared Var dv.core/filtered-data-list[0m
+  [36m107[0m  [36m    (into [] (concat [:div.container filter-row] rows))))[0m
+  [36m108[0m  [36m[0m
+  [36m109[0m  [36m(defn pm-page [][0m
+  [36m110[0m  [36m  (let [pm-auth @(rf/subscribe [:pm-auth])][0m
+  [36m111[0m  [36m    (cond[0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.173 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/dv/core.cljs   line:95  column:26  ----[0m
+
+  [1mUse of undeclared Var dv.core/pm-data-list[0m
+
+  [36m 91[0m  [36mfilter-str (:filter pm-data)[0m
+  [36m 92[0m  [36mfilter-row [:div.row>div.col-md-12 "Filter: " [text-input :pm-set-filter "text" filter-str]][0m
+  [36m 93[0m  [36mpm-data-lists (:lists pm-data)[0m
+  [36m 94[0m  [36mfiltered-lists (if (clojure.string/blank? filter-str)[0m
+  [33m 95[0m  [1m                 pm-data-list[0m
+  [0m   [0m  [33m                 ^--- Use of undeclared Var dv.core/pm-data-list[0m
+  [36m 96[0m  [36m                 (filter (fn [nv][0m
+  [36m 97[0m  [36m                           (some[0m
+  [36m 98[0m  [36m                            true?[0m
+  [36m 99[0m  [36m                            (map[0m
+  [36m100[0m  [36m                                  #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))[0m
+
+[36m----  Compiler Warning : Please see src/cljs/dv/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.012 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.781 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.723 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.773 seconds.[0m
+notifying browser that file changed:  out/dv/handlers.js

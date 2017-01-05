@@ -7,7 +7,6 @@
             [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]]
             [dv.ajax :refer [load-interceptors!]]
-            [dv.events]
             [dv.handlers]
             [dv.subscriptions])
   (:import goog.History))
@@ -88,10 +87,24 @@
      [:a.pointer {:on-click #(rf/dispatch [:auth-set-registering false])} "login"]]]])
 
 (defn pm-data []
-  [:div.container
-   [:div.row
-    [:div.col-md-12
-     "this is my stuff... work in progress"]]])
+  (let [pm-data @(rf/subscribe [:pm-data])
+        filter-str (:filter pm-data)
+        filter-row [:div.row>div.col-md-12 "Filter: " [text-input :pm-set-filter "text" filter-str]]
+        pm-data-lists (:lists pm-data)
+        filtered-lists (if (clojure.string/blank? filter-str)
+                         pm-data-lists
+                         (filter (fn [nv]
+                                   (some
+                                    true?
+                                    (map
+                                          #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))
+                                          [(:name nv) (:value nv)])))
+                                 pm-data-lists))
+        rows (map
+              (fn [item]
+                [:div.row [:div.col-md-4 (:name item)] [:div.col-md-8 (:value item)]])
+              filtered-lists)]
+    (into [] (concat [:div.container filter-row] rows))))
 
 (defn pm-page []
   (let [pm-auth @(rf/subscribe [:pm-auth])]

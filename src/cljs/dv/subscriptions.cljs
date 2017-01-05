@@ -17,6 +17,11 @@
     (:pm db)))
 
 (reg-sub
+  :pm-data
+  (fn [db _]
+    (get-in db [:pm :data])))
+
+(reg-sub
   :pm-auth
   (fn [db _]
     (get-in db [:pm :auth])))
