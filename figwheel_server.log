@@ -1000,3 +1000,96 @@ notifying browser that file changed:  out/dv/core.js
 [0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
 [32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.773 seconds.[0m
 notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.293 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.102 seconds.[0m
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.086 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.929 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.892 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.344 seconds.[0m
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 7.362 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.592 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.87 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 2.527 seconds.[0m
+[36m----  Could not Analyze  src/cljs/dv/handlers.cljs   line:73  column:4  ----[0m
+
+  [1mUnsupported binding form: (fn [item] (if (= item-id (:id item)) (assoc item name-or-value val) item))[0m
+
+  [36m71[0m  [36m[][0m
+  [36m72[0m  [36m(fn [db [id name-or-value item-id val]][0m
+  [33m73[0m  [1m  (let [lists-path [:pm :data :lists][0m
+  [0m  [0m  [33m  ^--- Unsupported binding form: (fn [item] (if (= item-id (:id item)) (assoc item name-or-value val) item))[0m
+  [36m74[0m  [36m        pm-lists (get-in db lists-path)[0m
+  [36m75[0m  [36m        new-pm-lists (map)[0m
+  [36m76[0m  [36m              (fn [item][0m
+
+[36m----  Analysis Error : Please see src/cljs/dv/handlers.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.915 seconds.[0m
+[36m----  Could not Analyze  src/cljs/dv/handlers.cljs   line:73  column:4  ----[0m
+
+  [1mUnsupported binding form: (fn [item] (if (= item-id (:id item)) (assoc item name-or-value val) item))[0m
+
+  [36m71[0m  [36m[][0m
+  [36m72[0m  [36m(fn [db [id name-or-value item-id val]][0m
+  [33m73[0m  [1m  (let [lists-path [:pm :data :lists][0m
+  [0m  [0m  [33m  ^--- Unsupported binding form: (fn [item] (if (= item-id (:id item)) (assoc item name-or-value val) item))[0m
+  [36m74[0m  [36m        pm-lists (get-in db lists-path)[0m
+  [36m75[0m  [36m        new-pm-lists (map)[0m
+  [36m76[0m  [36m              (fn [item][0m
+
+[36m----  Analysis Error : Please see src/cljs/dv/handlers.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 0.922 seconds.[0m
+[36m----  Could not Analyze  src/cljs/dv/handlers.cljs   line:73  column:4  ----[0m
+
+  [1mlet requires an even number of forms in binding vector[0m
+
+  [36m71[0m  [36m[][0m
+  [36m72[0m  [36m(fn [db [id name-or-value item-id val]][0m
+  [33m73[0m  [1m  (let [lists-path [:pm :data :lists][0m
+  [0m  [0m  [33m  ^--- let requires an even number of forms in binding vector[0m
+  [36m74[0m  [36m        pm-lists (get-in db lists-path)[0m
+  [36m75[0m  [36m        new-pm-lists (map (fn [item]))[0m
+  [36m76[0m  [36m          (if (= item-id (:id item)) (assoc item name-or-value val) item[0m
+
+[36m----  Analysis Error : Please see src/cljs/dv/handlers.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 4.37 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.367 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.928 seconds.[0m
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.109 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.716 seconds.[0m
+notifying browser that file changed:  out/dv/core.js

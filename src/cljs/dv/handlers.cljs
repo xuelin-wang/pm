@@ -45,12 +45,8 @@
  []
  (fn [db [id email password]]
    (let [db-login (update-in db [:pm :auth :login] (constantly true))
-         lists (map (fn [ii] {:name (str "name " ii) :value (str "value " ii)}) (range 100))]
+         lists (map (fn [ii] {:id (str "id_" ii) :name (str "name " ii) :value (str "value " ii)}) (range 100))]
        (assoc-in db-login [:pm :data :lists] lists))))
-
-
-
-
 
 (reg-event-db
  :auth-register
@@ -63,3 +59,21 @@
  []
  (fn [db [id registering]]
    (update-in db [:pm :auth :registering] (constantly registering))))
+
+(reg-event-db
+ :pm-set-editing-id
+ []
+ (fn [db [id editable item-id]]
+   (update-in db [:pm :data :editing-id] #(if editable item-id nil))))
+
+(reg-event-db
+ :pm-update-item
+ []
+ (fn [db [id name-or-value item-id val]]
+   (let [lists-path [:pm :data :lists]
+         pm-lists (get-in db lists-path)
+         new-pm-lists
+           (map
+            (fn [item]
+              (if (= item-id (:id item)) (assoc item name-or-value val) item)) pm-lists)]
+     (update-in db lists-path (constantly new-pm-lists)))))

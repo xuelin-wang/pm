@@ -38,10 +38,10 @@
     [:div.col-md-12
      "this is the story of pm... work in progress"]]])
 
-(defn- text-input [event-id input-type init-val]
+(defn- text-input [event-id event-params input-type init-val]
   (let [val (r/atom init-val)
         stop #(reset! val init-val)
-        save #(rf/dispatch [event-id @val])]
+        save #(rf/dispatch (into [] (concat [event-id] event-params [@val])))]
     [:input {:type input-type
              :auto-focus true
              :default-value init-val
@@ -55,10 +55,10 @@
 (defn pm-login [pm-auth]
   [:div.container
    [:div.row [:div.col-md-2 "Email address: "]
-    [:div.col-md-4 [text-input :auth-set-name "text" (:auth-name pm-auth)]]]
+    [:div.col-md-4 [text-input :auth-set-name nil "text" (:auth-name pm-auth)]]]
    [:div.row [:div.col-md-2 "Password: "]
     [:div.col-md-4
-     [text-input :auth-set-password "password" (:password pm-auth)]]]
+     [text-input :auth-set-password nil "password" (:password pm-auth)]]]
    [:div.row
     [:div.col-md-2]
     [:div.col-md-2
@@ -71,10 +71,10 @@
 (defn pm-register [pm-auth]
   [:div.container
    [:div.row [:div.col-md-2 "Email address: "]
-    [:div.col-md-4 [text-input :auth-set-name "text" (:auth-name pm-auth)]]]
+    [:div.col-md-4 [text-input :auth-set-name nil "text" (:auth-name pm-auth)]]]
    [:div.row [:div.col-md-2 "Password: "]
     [:div.col-md-4
-     [text-input :auth-set-password "password" (:password pm-auth)]]]
+     [text-input :auth-set-password nil "password" (:password pm-auth)]]]
    [:div.row
     [:div.col-md-2]
     [:div.col-md-2
@@ -86,10 +86,30 @@
     [:div.col-md-4 "Already have an account? please "
      [:a.pointer {:on-click #(rf/dispatch [:auth-set-registering false])} "login"]]]])
 
+(defn pm-editable-row [item]
+  [:div.row
+   [:div.col-md-4
+    [text-input :pm-update-item [:name (:id item)] "text" (:name item)]]
+   [:div.col-md-8
+    [text-input :pm-update-item [:value (:id item)] "text" (:value item)]]])
+
+(defn pm-readonly-row [item]
+  [:div.row
+   [:div.col-md-4
+    [:span {:on-click #(rf/dispatch [:pm-set-editing-id true (:id item)])} (:name item)]]
+   [:div.col-md-8
+    [:span {:on-click #(rf/dispatch [:pm-set-editing-id true (:id item)])} (:value item)]]])
+
+(defn pm-row [item editing]
+  (if editing
+    [pm-editable-row item]
+    [pm-readonly-row item]))
+
 (defn pm-data []
   (let [pm-data @(rf/subscribe [:pm-data])
         filter-str (:filter pm-data)
-        filter-row [:div.row>div.col-md-12 "Filter: " [text-input :pm-set-filter "text" filter-str]]
+        editing-id (:editing-id pm-data)
+        filter-row [:div.row>div.col-md-12 "Filter: " [text-input :pm-set-filter nil "text" filter-str]]
         pm-data-lists (:lists pm-data)
         filtered-lists (if (clojure.string/blank? filter-str)
                          pm-data-lists
@@ -97,12 +117,12 @@
                                    (some
                                     true?
                                     (map
-                                          #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))
-                                          [(:name nv) (:value nv)])))
+                                     #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase filter-str)))
+                                     [(:name nv) (:value nv)])))
                                  pm-data-lists))
         rows (map
               (fn [item]
-                [:div.row [:div.col-md-4 (:name item)] [:div.col-md-8 (:value item)]])
+                [pm-row item (= (:id item) editing-id)])
               filtered-lists)]
     (into [] (concat [:div.container filter-row] rows))))
 
