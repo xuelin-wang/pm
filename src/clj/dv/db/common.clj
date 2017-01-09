@@ -1,9 +1,9 @@
 (ns dv.db.common
-  (:import (com.mchange.v2.c3p0 ComboPooledDataSource)
-           (java.util UUID))
+  (:import (com.mchange.v2.c3p0 ComboPooledDataSource))
   (:require [to-jdbc-uri.core :refer [to-jdbc-uri]]
             [clojure.spec :as s]
-            [clojure.java.jdbc :as j]))
+            [clojure.java.jdbc :as j]
+            [dv.utils]))
 
 (defn- has-db-url? [] (some? (System/getenv "DATABASE_URL")))
 
@@ -70,6 +70,7 @@
        :auth [
               [:auth_id "char(32)" "NOT NULL"]
               [:auth_name "varchar(64)" "NOT NULL"]
+              [:constraint " UC_auth UNIQUE(auth_name) "]
               [:constraint " PK_auth PRIMARY KEY(auth_id) "]])))
 
 (defn- create-schema-auth-enc [db]
@@ -163,16 +164,6 @@
               (j/insert! db :strs {:owner_id owner-id :strs_id strs-id :str_id idx :str item}))
             strs))))
 
-(defn new-uuid []
-  (let [uuid-obj (UUID/randomUUID)
-        uuid-str (.toString uuid-obj)
-        str0 (.substring uuid-str 0 8)
-        str1 (.substring uuid-str 9 13)
-        str2 (.substring uuid-str 14 18)
-        str3 (.substring uuid-str 19 23)
-        str4 (.substring uuid-str 24)]
-    (str str0 str1 str2 str3 str4)))
-
 (defn- exists-auth [db auth-name]
   {:pre [(s/valid? string? auth-name)]}
   (let [curr-auths (j/query db ["select * from auth where auth_name = ?" auth-name])]
@@ -181,7 +172,7 @@
 (defn- add-auth [db auth-name password]
   {:pre [(s/valid? string? auth-name) (s/valid? string? password)]}
   (let [
-        uuid (new-uuid)
+        uuid (dv.utils/new-uuid)
         pw-strs-id (get-password-strs-id db)]
     (j/insert! db :auth {:auth_id uuid :auth_name auth-name})
     (save-strs db uuid pw-strs-id [password])))

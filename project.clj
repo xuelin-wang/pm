@@ -28,6 +28,7 @@
                  [org.webjars/bootstrap "4.0.0-alpha.5"]
                  [org.webjars/font-awesome "4.7.0"]
                  [re-frame "0.9.1"]
+                 [day8.re-frame/http-fx "0.1.3"]
                  [reagent "0.6.0"]
                  [reagent-utils "0.2.0"]
                  [ring-middleware-format "0.7.0"]

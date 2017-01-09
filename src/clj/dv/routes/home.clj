@@ -3,6 +3,7 @@
             [compojure.core :refer [defroutes GET POST]]
             [compojure.route :as route]
             [ring.util.http-response :as response]
+            [dv.admin :as admin]
             [dv.gql.graphql :as graphql]
             [cheshire.core :as json]
             [clojure.java.io :as io]))
@@ -25,7 +26,22 @@
            (graphql/execute query (json/parse-string variables))
            (catch Throwable e
              (println e)))))
+
   (route/resources "/iql" {:root "public/iql/build"})
+
+  (GET "/admin" [query :as request]
+       (println "admin GET query: " query)
+       (response/ok
+        (admin/execute query)))
+  (POST "/admin" [query :as request]
+        (println "admin POST query: " query)
+        ;; (println "Post variables: " (json/parse-string variables))
+        (response/ok
+         (try
+           (admin/execute query)
+           (catch Throwable e
+             (println e)))))
+
   (GET "/docs" []
        (-> (response/ok (-> "docs/docs.md" io/resource slurp))
            (response/header "Content-Type" "text/plain; charset=utf-8"))))
