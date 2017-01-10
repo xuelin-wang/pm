@@ -17,7 +17,7 @@
      :user "pm"
      :password "pm_pw"})
 
-(defn db-pool
+(defn- db-pool
   []
   (let [cpds0 (doto (ComboPooledDataSource.)
                     (.setDriverClass "org.postgresql.Driver")
@@ -32,6 +32,9 @@
                      (.setUser (:user local-db-spec))
                      (.setPassword (:password local-db-spec))))]
     {:datasource cpds}))
+
+(def pooled-db (delay (db-pool)))
+(defn db-conn [] @pooled-db)
 
 (defn- create-schema-strs-meta [db]
   (j/db-do-commands db
@@ -108,7 +111,7 @@
                    "insert into strs_meta (strs_id, owner_type, strs_name, cardinality, optional, notes) values (1, 'auth', 'password', 1, 0, 'password')"])))))
 
 (defn migrate []
-  (let [db (db-pool)]
+  (let [db (db-conn)]
 ;    (drop-schemas db)
     (when-not (has-table? db "auth") (create-schema-auth db))
     (when-not (has-table? db "enc") (create-schema-enc db))

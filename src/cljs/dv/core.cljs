@@ -146,11 +146,12 @@
 (defn admin-page [admin]
   [:div.container
    [:div.row
-    [:div.col-md-12
+    [:div.col-md-6
      [:button {:on-click #(rf/dispatch [:admin-execute-script]) :type "button" } "Go"]
-     [:span (if-let [loading? (:loading? admin)] "loading..." (str (or (:error admin) (:response admin))))]
      [:br]
-     [textarea-input :update-value [[:admin :script]] (:script admin) {:rows 10 :cols 50}]]]])
+     [textarea-input :update-value [[:admin :script]] (:script admin) {:rows 10 :cols 50}]]
+    [:div.col-md-6
+     (if-let [loading? (:loading? admin)] "loading..." (str (:results admin)))]]])
 
 (defn maybe-admin-page []
   (let [pm-auth @(rf/subscribe [:pm-auth])]

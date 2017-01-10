@@ -41,8 +41,7 @@
  (fn [db [_ response]]
    (-> db
        (assoc-in [:admin :loading?] false)
-       (assoc-in [:admin :error] nil)
-       (assoc-in [:admin :response] response))))
+       (assoc-in [:admin :results] response))))
 
 (reg-event-db
  :process-admin-error
@@ -50,8 +49,7 @@
  (fn [db [_ error]]
    (-> db
        (assoc-in [:admin :loading?] false)
-       (assoc-in [:admin :response] nil)
-       (assoc-in [:admin :error] error))))
+       (assoc-in [:admin :results] error))))
 
 (reg-event-fx
  :admin-execute-script

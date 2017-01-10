@@ -31,16 +31,13 @@
 
   (GET "/admin" [query :as request]
        (println "admin GET query: " query)
-       (response/ok
-        (admin/execute query)))
+       (let [results (try (admin/execute query) (catch Throwable e {:error (.getMessage e) :data {:query query}}))]
+         (response/ok results)))
+
   (POST "/admin" [query :as request]
         (println "admin POST query: " query)
-        ;; (println "Post variables: " (json/parse-string variables))
-        (response/ok
-         (try
-           (admin/execute query)
-           (catch Throwable e
-             (println e)))))
+        (let [results (try (admin/execute query) (catch Throwable e {:error (.getMessage e) :data {:query query}}))]
+          (response/ok results)))
 
   (GET "/docs" []
        (-> (response/ok (-> "docs/docs.md" io/resource slurp))
