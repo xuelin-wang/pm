@@ -19,19 +19,40 @@
       {:href uri
        :on-click #(reset! collapsed? true)} title]]))
 
+(defn maybe-nav-link [check? uri title page collapsed?]
+  (if check?
+    (let [selected-page (rf/subscribe [:page])]
+      [:li.nav-item
+       {:class (when (= page @selected-page) "active")}
+       [:a.nav-link
+        {:href uri
+         :on-click #(reset! collapsed? true)} title]])
+    [:span]))
+
+
+(defn maybe-logout-link [login?]
+  (let [maybe-logout-button
+        (if login?
+          [:a.nav-link.pointer
+            {:on-click #(rf/dispatch [:auth-logout]) } "Log out"] [:span "       "])]
+    [:li.nav-item maybe-logout-button]))
+
 (defn navbar []
-  (r/with-let [collapsed? (r/atom true)]
-    [:nav.navbar.navbar-dark.bg-primary
-     [:button.navbar-toggler.hidden-sm-up
-      {:on-click #(swap! collapsed? not)} "☰"]
-     [:div.collapse.navbar-toggleable-xs
-      (when-not @collapsed? {:class "in"})
-      [:a.navbar-brand {:href "#/"} "dv"]
-      [:ul.nav.navbar-nav
-       [nav-link "#/" "Home" :home collapsed?]
-       [nav-link "#/pm" "My stuff" :pm collapsed?]
-       [nav-link "#/admin" "Admin" :admin collapsed?]
-       [nav-link "#/settings" "Settings" :settings collapsed?]]]]))
+  (let
+    [pm-auth @(rf/subscribe [:pm-auth])
+     login? (:login pm-auth)]
+    (r/with-let [collapsed? (r/atom true)]
+      [:nav.navbar.navbar-dark.bg-primary
+       [:button.navbar-toggler.hidden-sm-up
+        {:on-click #(swap! collapsed? not)} "☰"]
+       [:div.collapse.navbar-toggleable-xs
+        (when-not @collapsed? {:class "in"})
+        [:ul.nav.navbar-nav
+         [nav-link "#/pm" "Home" :pm collapsed?]
+         [maybe-nav-link login? "#/admin" "Admin" :admin collapsed?]
+         [maybe-nav-link login? "#/settings" "Settings" :settings collapsed?]
+         [maybe-logout-link login?]]]])))
+
 
 (defn settings-page []
   [:div.container
@@ -124,9 +145,17 @@
 
 (defn pm-data []
   (let [pm-data @(rf/subscribe [:pm-data])
+        new-row-name (get-in pm-data [:new-row :name])
+        new-row-value (get-in pm-data [:new-row :value])
+        add-row [:div.row
+                 [:div.col-md-5 "Name: " [text-input :update-value [[:pm :data :new-row :name]] "text" new-row-name nil]]
+                 [:div.col-md-5 "Value: " [text-input :update-value [[:pm :data :new-row :value]] "text" new-row-value nil]]
+                 [:div.col-md-2
+                  [:button {:on-click #(rf/dispatch [:pm-add-item nil]) :type "button" } "Add"]]]
         filter-str (:filter pm-data)
         editing-id (:editing-id pm-data)
-        filter-row [:div.row>div.col-md-12 "Filter: " [text-input :update-value [[:pm :data :filter]] "text" filter-str nil]]
+        filter-row [:div.row>div.col-md-12 "Filter: "
+                    [text-input :update-value [[:pm :data :filter]] "text" filter-str nil]]
         pm-data-lists (vals (:lists pm-data))
         filtered-lists (if (clojure.string/blank? filter-str)
                          pm-data-lists
@@ -141,7 +170,7 @@
               (fn [item]
                 [pm-row item (= (:id item) editing-id)])
               filtered-lists)]
-    (into [] (concat [:div.container filter-row] rows))))
+    (into [] (concat [:div.container add-row filter-row] rows))))
 
 (defn admin-page [admin]
   [:div.container
@@ -191,7 +220,7 @@
 (secretary/set-config! :prefix "#")
 
 (secretary/defroute "/" []
-  (rf/dispatch [:update-value [:page] :home]))
+  (rf/dispatch [:update-value [:page] :pm]))
 
 (secretary/defroute "/pm" []
   (rf/dispatch [:update-value [:page] :pm]))

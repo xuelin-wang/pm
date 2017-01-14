@@ -7,6 +7,7 @@
             [ring.middleware.format :refer [wrap-restful-format]]
             [dv.config :refer [env]]
             [ring-ttl-session.core :refer [ttl-memory-store]]
+            [ring.util.http-response :as response]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]])
   (:import [javax.servlet ServletContext]))
 
@@ -34,6 +35,14 @@
         (error-page {:status 500
                      :title "Something very bad has happened!"
                      :message "We've dispatched a team of highly trained gnomes to take care of the problem."})))))
+
+(defn wrap-rest-error [handler]
+  (fn [req]
+    (try
+      (handler req)
+      (catch Throwable t
+        (log/error t)
+        (response/ok {:error (.getMessage t) :data nil})))))
 
 (defn wrap-csrf [handler]
   (wrap-anti-forgery

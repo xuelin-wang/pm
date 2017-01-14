@@ -1,7 +1,7 @@
 (ns dv.handler
   (:require [compojure.core :refer [routes wrap-routes]]
             [dv.layout :refer [error-page]]
-            [dv.routes.home :refer [home-routes]]
+            [dv.routes.home :refer [home-routes pm-rest-routes]]
             [compojure.route :as route]
             [ring.middleware.json :refer [wrap-json-response]]
             [ring.middleware.json :refer [wrap-json-params]]
@@ -17,18 +17,28 @@
 
 (def app-routes
   (routes
-    (-> #'home-routes
-;;        (wrap-routes middleware/wrap-csrf)
-;;        wrap-json-response
-        (wrap-cors :access-control-allow-origin [#"http://localhost:3000" #"http://.*" #"https://.*"]
-                   :access-control-allow-methods [:get :put :post :delete])
-        (wrap-defaults api-defaults)
-        (wrap-json-params)
-        (wrap-routes middleware/wrap-formats))
+   (-> #'home-routes
+       ;;        (wrap-routes middleware/wrap-csrf)
+       ;;        wrap-json-response
+       (wrap-cors :access-control-allow-origin [#"http://localhost:3000" #"http://.*" #"https://.*"]
+                  :access-control-allow-methods [:get :put :post :delete])
+       (wrap-defaults api-defaults)
+       (wrap-json-params)
+       (wrap-routes middleware/wrap-formats))
 
-    (route/not-found
-      (:body
-        (error-page {:status 404
-                     :title "page not found"})))))
+   (-> #'pm-rest-routes
+       ;;        (wrap-routes middleware/wrap-csrf)
+       ;;        wrap-json-response
+       (wrap-cors :access-control-allow-origin [#"http://localhost:3000" #"http://.*" #"https://.*"]
+                  :access-control-allow-methods [:get :put :post :delete])
+       (wrap-defaults api-defaults)
+       (wrap-json-params)
+       (wrap-routes middleware/wrap-formats)
+       (middleware/wrap-rest-error))
+
+   (route/not-found
+    (:body
+     (error-page {:status 404
+                  :title "page not found"})))))
 
 (defn app [] (middleware/wrap-base #'app-routes))

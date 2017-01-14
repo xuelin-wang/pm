@@ -4,6 +4,8 @@
             [compojure.route :as route]
             [ring.util.http-response :as response]
             [dv.admin :as admin]
+            [dv.auth :as auth]
+            [dv.pm :as pm]
             [dv.gql.graphql :as graphql]
             [cheshire.core :as json]
             [clojure.java.io :as io]))
@@ -29,16 +31,37 @@
 
   (route/resources "/iql" {:root "public/iql/build"})
 
+  (GET "/docs" []
+       (-> (response/ok (-> "docs/docs.md" io/resource slurp))
+           (response/header "Content-Type" "text/plain; charset=utf-8"))))
+
+(defroutes pm-rest-routes
   (GET "/admin" [query :as request]
        (println "admin GET query: " query)
-       (let [results (try (admin/execute query) (catch Throwable e {:error (.getMessage e) :data {:query query}}))]
+       (let [results (admin/execute query)]
          (response/ok results)))
 
   (POST "/admin" [query :as request]
         (println "admin POST query: " query)
-        (let [results (try (admin/execute query) (catch Throwable e {:error (.getMessage e) :data {:query query}}))]
+        (let [results {:data (admin/execute query)}]
           (response/ok results)))
 
-  (GET "/docs" []
-       (-> (response/ok (-> "docs/docs.md" io/resource slurp))
-           (response/header "Content-Type" "text/plain; charset=utf-8"))))
+  (GET "/pm_get_list" [auth-name list-name :as request]
+       (let [results {:data (pm/get-list auth-name list-name)}]
+         (response/ok results)))
+
+  (GET "/pm_add_item" [auth-name list-name name value :as request]
+       (let [item-id {:data (pm/add-item-to-list auth-name list-name name value)}]
+         (response/ok {:id item-id})))
+
+  (GET "/auth_register" [name password :as request]
+       (let [results {:data (auth/register name password)}]
+         (response/ok results)))
+
+  (GET "/auth_login" [name password :as request]
+       (let [results {:data (auth/login name password)}]
+         (response/ok results)))
+
+  (GET "/auth_logout" [name :as request]
+      (let [results {:data (auth/logout name)}]
+        (response/ok results))))
