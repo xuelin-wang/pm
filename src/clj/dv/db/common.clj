@@ -113,7 +113,7 @@
 
 (defn migrate []
   (let [db (db-conn)]
-    (drop-schemas db)
+;    (drop-schemas db)
     (when-not (has-table? db "auth") (create-schema-auth db))
     (when-not (has-table? db "enc") (create-schema-enc db))
     (when-not (has-table? db "auth_enc") (create-schema-auth-enc db))
