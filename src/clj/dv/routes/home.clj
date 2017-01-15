@@ -54,14 +54,14 @@
        (let [item-id {:data (pm/add-item-to-list auth-name list-name name value)}]
          (response/ok {:id item-id})))
 
-  (GET "/auth_register" [name password :as request]
-       (let [results {:data (auth/register name password)}]
+  (GET "/auth_register" [auth-name password :as request]
+       (let [results {:data (auth/register auth-name password)}]
          (response/ok results)))
 
-  (GET "/auth_login" [name password :as request]
-       (let [results {:data (auth/login name password)}]
+  (GET "/auth_login" [auth-name password :as request]
+       (let [results {:data (auth/login auth-name password)}]
          (response/ok results)))
 
-  (GET "/auth_logout" [name :as request]
-      (let [results {:data (auth/logout name)}]
+  (GET "/auth_logout" [auth-name :as request]
+      (let [results {:data (auth/logout auth-name)}]
         (response/ok results))))

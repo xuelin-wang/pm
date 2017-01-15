@@ -18,6 +18,9 @@ body {
 .navbar-nav .nav-link + .nav-link {
   margin-left: 0;
 }
+.error {
+  color: red;
+}
 
 .pointer {
   cursor: pointer;

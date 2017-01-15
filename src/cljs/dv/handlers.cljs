@@ -43,8 +43,10 @@
  :process-register-response
  []
  (fn [db [_ response]]
-   (let [db1 (process-response db [_ [:pm :auth :register] response])]
-     (assoc-in db1 [:pm :auth :login] (not (:error response))))))
+   (let [success? (:data response)
+         db1 (assoc-in db [:pm :auth :register :error]
+                       (if success? "" "There exists an account for the email address already"))]
+     (assoc-in db1 [:pm :auth :login] :success))))
 
 (reg-event-fx
  :auth-register
@@ -65,8 +67,11 @@
  :process-login-response
  []
  (fn [db [_ response]]
-   (let [db1 (process-response db [_ [:pm :auth :sign-in] response])]
-     (assoc-in db1 [:pm :auth :login] (:data response)))))
+   (let [login? (:data response)
+         db1 (assoc-in db [:pm :auth :sign-in :error]
+                       (if login? "" "Email address or password doesn't match"))]
+     (print (str "login? " login? "db1: " db1))
+     (assoc-in db1 [:pm :auth :login] login?))))
 
 (reg-event-fx
  :auth-login
@@ -76,7 +81,7 @@
      [auth (get-in db [:pm :auth])]
      {:http-xhrio {:method          :get
                    :uri             "/auth_login"
-                   :params          {:name (:auth-name auth) :password (:password auth)}
+                   :params          (select-keys auth [:auth-name :password])
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      [:process-login-response]
                    :on-failure      [:process-login-response]}})))

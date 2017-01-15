@@ -1,0 +1,141 @@
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.086 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.488 seconds.[0m
+[36m----  Could not Analyze  src/cljs/dv/handlers.cljs   line:46  column:4  ----[0m
+
+  [1mlet requires an even number of forms in binding vector[0m
+
+  [36m44[0m  [36m[][0m
+  [36m45[0m  [36m(fn [db [_ response]][0m
+  [33m46[0m  [1m  (let [success? (:data response)[0m
+  [0m  [0m  [33m  ^--- let requires an even number of forms in binding vector[0m
+  [36m47[0m  [36m        db1 (assoc-in db [:pm :auth :register :error])[0m
+  [36m48[0m  [36m        (if success? "" "There exists an account for the email address already")][0m
+  [36m49[0m  [36m    (assoc-in db1 [:pm :auth :login] (not (:error response))))))[0m
+
+[36m----  Analysis Error : Please see src/cljs/dv/handlers.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 0.809 seconds.[0m
+[36m----  Could not Analyze  src/cljs/dv/handlers.cljs   line:46  column:4  ----[0m
+
+  [1mlet requires an even number of forms in binding vector[0m
+
+  [36m44[0m  [36m[][0m
+  [36m45[0m  [36m(fn [db [_ response]][0m
+  [33m46[0m  [1m  (let [success? (:data response)[0m
+  [0m  [0m  [33m  ^--- let requires an even number of forms in binding vector[0m
+  [36m47[0m  [36m        db1 (assoc-in db [:pm :auth :register :error])[0m
+  [36m48[0m  [36m        (if success? "" "There exists an account for the email address already")][0m
+  [36m49[0m  [36m    (assoc-in db1 [:pm :auth :login] :success))))[0m
+
+[36m----  Analysis Error : Please see src/cljs/dv/handlers.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.797 seconds.[0m
+[36m----  Could not Analyze  src/cljs/dv/handlers.cljs   line:46  column:4  ----[0m
+
+  [1mlet requires an even number of forms in binding vector[0m
+
+  [36m44[0m  [36m[][0m
+  [36m45[0m  [36m(fn [db [_ response]][0m
+  [33m46[0m  [1m  (let [success? (:data response)[0m
+  [0m  [0m  [33m  ^--- let requires an even number of forms in binding vector[0m
+  [36m47[0m  [36m        db1 (assoc-in db [:pm :auth :register :error])[0m
+  [36m48[0m  [36m        (if success? "" "There exists an account for the email address already")][0m
+  [36m49[0m  [36m    (assoc-in db1 [:pm :auth :login] :success))))[0m
+
+[36m----  Analysis Error : Please see src/cljs/dv/handlers.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 2.059 seconds.[0m
+[36m----  Could not Analyze  src/cljs/dv/handlers.cljs   line:46  column:4  ----[0m
+
+  [1mlet requires an even number of forms in binding vector[0m
+
+  [36m44[0m  [36m[][0m
+  [36m45[0m  [36m(fn [db [_ response]][0m
+  [33m46[0m  [1m  (let [success? (:data response)[0m
+  [0m  [0m  [33m  ^--- let requires an even number of forms in binding vector[0m
+  [36m47[0m  [36m        db1 (assoc-in db [:pm :auth :register :error])[0m
+  [36m48[0m  [36m        (if success? "" "There exists an account for the email address already")][0m
+  [36m49[0m  [36m    (assoc-in db1 [:pm :auth :login] :success))))[0m
+
+[36m----  Analysis Error : Please see src/cljs/dv/handlers.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 2.289 seconds.[0m
+[36m----  Could not Analyze  src/cljs/dv/handlers.cljs   line:46  column:4  ----[0m
+
+  [1mlet requires an even number of forms in binding vector[0m
+
+  [36m44[0m  [36m[][0m
+  [36m45[0m  [36m(fn [db [_ response]][0m
+  [33m46[0m  [1m  (let [success? (:data response)[0m
+  [0m  [0m  [33m  ^--- let requires an even number of forms in binding vector[0m
+  [36m47[0m  [36m        db1 (assoc-in db [:pm :auth :register :error])[0m
+  [36m48[0m  [36m        (if success? "" "There exists an account for the email address already")][0m
+  [36m49[0m  [36m    (assoc-in db1 [:pm :auth :login] :success))))[0m
+
+[36m----  Analysis Error : Please see src/cljs/dv/handlers.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 0.814 seconds.[0m
+[36m----  Could not Analyze  src/cljs/dv/handlers.cljs   line:46  column:4  ----[0m
+
+  [1mlet requires an even number of forms in binding vector[0m
+
+  [36m44[0m  [36m[][0m
+  [36m45[0m  [36m(fn [db [_ response]][0m
+  [33m46[0m  [1m  (let [success? (:data response)[0m
+  [0m  [0m  [33m  ^--- let requires an even number of forms in binding vector[0m
+  [36m47[0m  [36m        db1 (assoc-in db [:pm :auth :register :error])[0m
+  [36m48[0m  [36m        (if success? "" "There exists an account for the email address already")][0m
+  [36m49[0m  [36m    (assoc-in db1 [:pm :auth :login] :success))))[0m
+
+[36m----  Analysis Error : Please see src/cljs/dv/handlers.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.962 seconds.[0m
+[36m----  Could not Read  src/cljs/dv/handlers.cljs   line:83  column:78  ----[0m
+
+  [1mMap literal must contain an even number of forms[0m
+
+  [36m81[0m  [36m{:http-xhrio {:method          :get[0m
+  [36m82[0m  [36m              :uri             "/auth_login"[0m
+  [33m83[0m  [1m              :params          {select-keys auth [:auth-name :password]}[0m
+  [0m  [0m  [33m                                                                        ^--- Map literal must contain an even number of forms[0m
+  [36m84[0m  [36m              :response-format (ajax/json-response-format {:keywords? true})[0m
+  [36m85[0m  [36m              :on-success      [:process-login-response][0m
+  [36m86[0m  [36m              :on-failure      [:process-login-response]}})))[0m
+
+[36m----  Reader Error : Please see src/cljs/dv/handlers.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 4.631 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 5.847 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.956 seconds.[0m
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.648 seconds.[0m
+notifying browser that file changed:  out/dv/handlers.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.468 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.722 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.228 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.044 seconds.[0m
+notifying browser that file changed:  out/dv/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.266 seconds.[0m
+notifying browser that file changed:  out/dv/core.js

@@ -93,35 +93,39 @@
 (defn pm-login [pm-auth]
   [:div.container
    [:div.row [:div.col-md-2 "Email address: "]
-    [:div.col-md-4 [text-input :update-value [[:pm :auth :auth-name]] "text" (:auth-name pm-auth) nil]]]
+    [:div.col-md-6 [text-input :update-value [[:pm :auth :auth-name]] "text" (:auth-name pm-auth) nil]]]
    [:div.row [:div.col-md-2 "Password: "]
-    [:div.col-md-4
+    [:div.col-md-6
      [text-input :update-value [[:pm :auth :password]] "password" (:password pm-auth) nil]]]
    [:div.row
     [:div.col-md-2]
-    [:div.col-md-2
+    [:div.col-md-6
      [:button {:on-click #(rf/dispatch [:auth-login]) :type "button" } "Login"]]]
 
+   [:div.row [:div.col-md-8 [:span.error (get-in pm-auth [:sign-in :error])]]]
+
    [:div.row
-    [:div.col-md-4 "Don't have an account? please "
+    [:div.col-md-8 "Don't have an account? please "
      [:a.pointer {:on-click #(rf/dispatch [:update-value [:pm :auth :registering] true])} "register"]]]])
 
 (defn pm-register [pm-auth]
   [:div.container
    [:div.row [:div.col-md-2 "Email address: "]
-    [:div.col-md-4 [text-input :update-value [[:pm :auth :auth-name]] "text" (:auth-name pm-auth) nil]]]
+    [:div.col-md-6 [text-input :update-value [[:pm :auth :auth-name]] "text" (:auth-name pm-auth) nil]]]
    [:div.row [:div.col-md-2 "Password: "]
-    [:div.col-md-4
+    [:div.col-md-6
      [text-input :update-value [[:pm :auth :password]] "password" (:password pm-auth) nil]]]
    [:div.row
     [:div.col-md-2]
-    [:div.col-md-2
+    [:div.col-md-6
      [:button {:on-click #(rf/dispatch [:auth-register]) :type "button" } "Register"]]]
 
+   [:div.row [:div.col-md-8 [:span.error (get-in pm-auth [:register :error])]]]
+
    [:div.row
-    [:div.col-md-4 "Please click the link as instructed in the confirmation email after registration"]]
+    [:div.col-md-8 "Please click the link as instructed in the confirmation email after registration"]]
    [:div.row
-    [:div.col-md-4 "Already have an account? please "
+    [:div.col-md-8 "Already have an account? please "
      [:a.pointer {:on-click #(rf/dispatch [:update-value [:pm :auth :registering] false])} "login"]]]])
 
 (defn pm-editable-row [item]
@@ -194,8 +198,8 @@
   (let [pm-auth @(rf/subscribe [:pm-auth])]
     (cond
       (:login pm-auth) [pm-data]
-      (:registering pm-auth) [pm-register]
-      :else [pm-login])))
+      (:registering pm-auth) [pm-register pm-auth]
+      :else [pm-login pm-auth])))
 
 (defn home-page []
   [:div.container
