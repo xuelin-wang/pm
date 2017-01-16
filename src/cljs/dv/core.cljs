@@ -40,7 +40,7 @@
 (defn navbar []
   (let
     [pm-auth @(rf/subscribe [:pm-auth])
-     login? (:login pm-auth)]
+     login? (:login? pm-auth)]
     (r/with-let [collapsed? (r/atom true)]
       [:nav.navbar.navbar-dark.bg-primary
        [:button.navbar-toggler.hidden-sm-up
@@ -102,11 +102,11 @@
     [:div.col-md-6
      [:button {:on-click #(rf/dispatch [:auth-login]) :type "button" } "Login"]]]
 
-   [:div.row [:div.col-md-8 [:span.error (get-in pm-auth [:sign-in :error])]]]
+   [:div.row [:div.col-md-8 [:span.error (get-in pm-auth [:login :error])]]]
 
    [:div.row
     [:div.col-md-8 "Don't have an account? please "
-     [:a.pointer {:on-click #(rf/dispatch [:update-value [:pm :auth :registering] true])} "register"]]]])
+     [:a.pointer {:on-click #(rf/dispatch [:update-value [:pm :auth :registering?] true])} "register"]]]])
 
 (defn pm-register [pm-auth]
   [:div.container
@@ -126,7 +126,7 @@
     [:div.col-md-8 "Please click the link as instructed in the confirmation email after registration"]]
    [:div.row
     [:div.col-md-8 "Already have an account? please "
-     [:a.pointer {:on-click #(rf/dispatch [:update-value [:pm :auth :registering] false])} "login"]]]])
+     [:a.pointer {:on-click #(rf/dispatch [:update-value [:pm :auth :registering?] false])} "login"]]]])
 
 (defn pm-editable-row [item]
   [:div.row
@@ -188,10 +188,13 @@
     [:div.col-md-6
      (if-let [loading? (:loading? admin)] "loading..." (str (:results admin)))]]])
 
+(defn- is-admin?
+  [auth] (and (:login? auth) (= "xuelin.wang@gmail.com" (:auth-name auth))))
+
 (defn maybe-admin-page []
   (let [pm-auth @(rf/subscribe [:pm-auth])]
     (when
-      (:admin pm-auth)
+      (is-admin? pm-auth)
       (let
         [admin @(rf/subscribe [:admin])]
         [admin-page admin]))))
@@ -199,8 +202,8 @@
 (defn pm-page []
   (let [pm-auth @(rf/subscribe [:pm-auth])]
     (cond
-      (:login pm-auth) [pm-data]
-      (:registering pm-auth) [pm-register pm-auth]
+      (:login? pm-auth) [pm-data]
+      (:registering? pm-auth) [pm-register pm-auth]
       :else [pm-login pm-auth])))
 
 (defn home-page []

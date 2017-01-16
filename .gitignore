@@ -3,6 +3,7 @@
 /classes
 /checkouts
 pom.xml
+figwheel_server.log
 *.jar
 *.class
 /.lein-*

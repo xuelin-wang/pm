@@ -44,15 +44,15 @@
  []
  (fn [{:keys [db]} [_ response]]
    (let [registered? (:data response)
-         db1 (assoc-in db [:pm :auth :register :error]
-                       (if registered? "" "There exists an account for the email address already"))
-         db2 (assoc-in db1 [:pm :auth :login] registered?)]
-
+         new-db (-> db
+                    (assoc-in [:pm :auth :regestring?] false)
+                    (assoc-in [:pm :auth :register :error]
+                              (if registered? "" "There exists an account for the email address already"))
+                    (assoc-in [:pm :auth :login?] registered?))]
      (if registered?
-       {:db db2
+       {:db new-db
          :dispatch [:pm-get-list nil]}
-       {:db db2}))))
-
+       {:db new-db}))))
 
 (reg-event-fx
  :auth-register
@@ -62,7 +62,7 @@
      [auth (get-in db [:pm :auth])]
      {:http-xhrio {:method          :get
                    :uri             "/auth_register"
-                   :params          {:name (:auth-name auth) :password (:password auth)}
+                   :params          (select-keys auth [:auth-name :password])
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      [:process-register-response]
                    :on-failure      [:process-register-response]}
@@ -74,9 +74,9 @@
  []
  (fn [{:keys [db]} [_ response]]
    (let [login? (:data response)
-         db1 (assoc-in db [:pm :auth :sign-in :error]
+         db1 (assoc-in db [:pm :auth :login :error]
                        (if login? "" "Email address or password doesn't match"))
-         db2 (assoc-in db1 [:pm :auth :login] login?)]
+         db2 (assoc-in db1 [:pm :auth :login?] login?)]
 
      (if login?
        {:db db2
@@ -96,6 +96,11 @@
                    :on-success      [:process-login-response]
                    :on-failure      [:process-login-response]}})))
 
+(reg-event-db
+ :dummy
+ []
+ (fn [db [_]] db))
+
 (reg-event-fx
  :auth-logout
  []
@@ -106,9 +111,9 @@
                    :uri             "/auth_logout"
                    :params          (select-keys auth [:auth-name])
                    :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success      nil
-                   :on-failure      nil}
-      :db  (assoc-in db [:pm :auth :login] false)})))
+                   :on-success      [:dummy]
+                   :on-failure      [:dummy]}
+      :db  (assoc-in db [:pm :auth :login?] false)})))
 
 (reg-event-db
  :process-pm-list-response
@@ -139,8 +144,8 @@
    (let [new-item-id (get-in response [:data :id])
          new-row (get-in db [:pm :data :new-row])
          new-item (assoc new-row :id new-item-id)
-         lists (get-in db [:pm :data :lists] {})]
-     (assoc-in db [:pm :data :lists] (merge lists {new-item-id new-item})))))
+         pm-list (get-in db [:pm :data :list] {})]
+     (assoc-in db [:pm :data :list] (merge pm-list {new-item-id new-item})))))
 
 (reg-event-fx
  :pm-add-item
