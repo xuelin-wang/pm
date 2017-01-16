@@ -39,14 +39,20 @@
                    :on-failure      [:process-admin-response]}
       :db  (assoc-in db [:admin :loading?] true)})))
 
-(reg-event-db
+(reg-event-fx
  :process-register-response
  []
- (fn [db [_ response]]
-   (let [success? (:data response)
+ (fn [{:keys [db]} [_ response]]
+   (let [registered? (:data response)
          db1 (assoc-in db [:pm :auth :register :error]
-                       (if success? "" "There exists an account for the email address already"))]
-     (assoc-in db1 [:pm :auth :login] :success))))
+                       (if registered? "" "There exists an account for the email address already"))
+         db2 (assoc-in db1 [:pm :auth :login] registered?)]
+
+     (if registered?
+       {:db db2
+         :dispatch [:pm-get-list nil]}
+       {:db db2}))))
+
 
 (reg-event-fx
  :auth-register
@@ -63,22 +69,26 @@
       :db  (assoc-in db [:auth :loading?] true)})))
 
 
-(reg-event-db
+(reg-event-fx
  :process-login-response
  []
- (fn [db [_ response]]
+ (fn [{:keys [db]} [_ response]]
    (let [login? (:data response)
          db1 (assoc-in db [:pm :auth :sign-in :error]
-                       (if login? "" "Email address or password doesn't match"))]
-     (print (str "login? " login? "db1: " db1))
-     (assoc-in db1 [:pm :auth :login] login?))))
+                       (if login? "" "Email address or password doesn't match"))
+         db2 (assoc-in db1 [:pm :auth :login] login?)]
+
+     (if login?
+       {:db db2
+         :dispatch [:pm-get-list nil]}
+       {:db db2}))))
 
 (reg-event-fx
  :auth-login
  []
  (fn [{:keys [db]} [_]]
    (let
-     [auth (get-in db [:pm :auth])]
+     [auth (get-in db [:pm :auth]) _ (println (str auth))]
      {:http-xhrio {:method          :get
                    :uri             "/auth_login"
                    :params          (select-keys auth [:auth-name :password])
@@ -94,7 +104,7 @@
      [auth (get-in db [:pm :auth])]
      {:http-xhrio {:method          :get
                    :uri             "/auth_logout"
-                   :params          {:name (:auth-name auth)}
+                   :params          (select-keys auth [:auth-name])
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      nil
                    :on-failure      nil}
@@ -104,10 +114,12 @@
  :process-pm-list-response
  []
  (fn [db [_ response]]
-   (let [db (process-response db [_ [:pm :data :lists] (:data response)])])))
+   (-> db
+       (assoc-in [:pm :data :loading?] false)
+       (assoc-in [:pm :data :list] (:data response)))))
 
 (reg-event-fx
- :pm_get_list
+ :pm-get-list
  []
  (fn [{:keys [db]} [_ list-name]]
    (let

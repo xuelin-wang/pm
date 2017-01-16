@@ -160,20 +160,22 @@
         editing-id (:editing-id pm-data)
         filter-row [:div.row>div.col-md-12 "Filter: "
                     [text-input :update-value [[:pm :data :filter]] "text" filter-str nil]]
-        pm-data-lists (vals (:lists pm-data))
-        filtered-lists (if (clojure.string/blank? filter-str)
-                         pm-data-lists
+        pm-data-list (vals (:list pm-data))
+        _ (println (str "pm-data: " pm-data))
+        filtered-list (if (clojure.string/blank? filter-str)
+                         pm-data-list
                          (filter (fn [nv]
                                    (some
                                     true?
                                     (map
                                      #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase (.trim filter-str))))
                                      [(:name nv) (:value nv)])))
-                                 pm-data-lists))
+                                 pm-data-list))
+        _ (println (str "filtered: "(into [] filtered-list)))
         rows (map
               (fn [item]
                 [pm-row item (= (:id item) editing-id)])
-              filtered-lists)]
+              filtered-list)]
     (into [] (concat [:div.container add-row filter-row] rows))))
 
 (defn admin-page [admin]

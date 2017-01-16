@@ -59,6 +59,7 @@
          (response/ok results)))
 
   (GET "/auth_login" [auth-name password :as request]
+       (print (str "login params: " auth-name "," password))
        (let [results {:data (auth/login auth-name password)}]
          (response/ok results)))
 

@@ -178,7 +178,7 @@
   {:pre [(s/valid? string? owner-id) (s/valid? string? list-name)]}
   (let [
         list-id (get-strs-id db "auth" list-name)
-        list-strs (get-strs db owner-id list-id)] (strs-to-tuples [:name :value])))
+        list-strs (get-strs db owner-id list-id)] (strs-to-tuples list-strs [:name :value])))
 
 (defn- get-auth-id [db auth-name]
   {:pre (s/valid? string? auth-name)}
