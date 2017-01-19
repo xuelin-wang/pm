@@ -1,9 +1,10 @@
 (ns dv.handler
   (:require [compojure.core :refer [routes wrap-routes]]
             [dv.layout :refer [error-page]]
-            [dv.routes.home :refer [home-routes pm-rest-routes]]
+            [dv.routes.home :refer [home-routes pm-get-routes pm-post-routes]]
             [compojure.route :as route]
             [ring.middleware.json :refer [wrap-json-response]]
+            [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.json :refer [wrap-json-params]]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.defaults :refer :all]
@@ -26,13 +27,25 @@
        (wrap-json-params)
        (wrap-routes middleware/wrap-formats))
 
-   (-> #'pm-rest-routes
+   (-> #'pm-get-routes
        ;;        (wrap-routes middleware/wrap-csrf)
        ;;        wrap-json-response
        (wrap-cors :access-control-allow-origin [#"http://localhost:3000" #"http://.*" #"https://.*"]
                   :access-control-allow-methods [:get :put :post :delete])
+       (middleware/wrap-body-string)
        (wrap-defaults api-defaults)
        (wrap-json-params)
+       (wrap-routes middleware/wrap-formats)
+       (middleware/wrap-rest-error))
+
+   (-> #'pm-post-routes
+       ;;        (wrap-routes middleware/wrap-csrf)
+       ;;        wrap-json-response
+;       (wrap-cors :access-control-allow-origin [#"http://localhost:3000" #"http://.*" #"https://.*"]
+;                  :access-control-allow-methods [:get :put :post :delete]
+;       (middleware/wrap-body-string)
+       ;       (wrap-defaults api-defaults)
+;       (wrap-json-params)
        (wrap-routes middleware/wrap-formats)
        (middleware/wrap-rest-error))
 

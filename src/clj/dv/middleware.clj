@@ -8,6 +8,7 @@
             [dv.config :refer [env]]
             [ring-ttl-session.core :refer [ttl-memory-store]]
             [ring.util.http-response :as response]
+            [ring.util.request]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]])
   (:import [javax.servlet ServletContext]))
 
@@ -60,6 +61,12 @@
       ;; disable wrap-formats for websockets
       ;; since they're not compatible with this middleware
       ((if (:websocket? request) handler wrapped) request))))
+
+(defn wrap-body-string [handler]
+  (fn [request]
+    (print (str "inbodystring:" (:body request)))
+    (let [body-str (ring.util.request/body-string request)]
+      (handler (assoc request :body body-str)))))
 
 (defn wrap-base [handler]
   (-> ((:middleware defaults) handler)

@@ -25,15 +25,28 @@
  []
  (fn [db [_ response]] (process-response db [_ [:admin] response])))
 
+(defn url-encode [ss] (js/encodeURIComponent ss))
+(defn url-encode-map [mm]
+  (let [nvs (into [] mm)
+        encoded-nvs (map #(into [] (map url-encode %))
+                         nvs)]
+    (into {} (into [] encoded-nvs))))
+
+(defn clj->json [ds] (.stringify js/JSON (clj->js ds)))
+(defn clj->url-encoded-json [ds] (url-encode (clj->json ds)))
+
 (reg-event-fx
  :admin-execute-script
  []
  (fn [{:keys [db]} [_]]
    (let
-     [script (get-in db [:admin :script])]
-     {:http-xhrio {:method          :get
+     [admin (:admin db)
+      script-type (or (:script-type admin) "sql_query")
+      params {:script-type script-type :script (:script admin)}]
+     {:http-xhrio {:method          :post
                    :uri             "/admin"
-                   :params          {:query script}
+                   :format           (ajax/url-request-format)
+                   :params          {:p (clj->url-encoded-json params)}
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      [:process-admin-response]
                    :on-failure      [:process-admin-response]}

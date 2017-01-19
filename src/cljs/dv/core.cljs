@@ -7,6 +7,7 @@
             [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]]
             [dv.ajax :refer [load-interceptors!]]
+            [dv.commonutils :as commonutils]
             [dv.handlers]
             [dv.subscriptions])
   (:import goog.History))
@@ -161,7 +162,6 @@
         filter-row [:div.row>div.col-md-12 "Filter: "
                     [text-input :update-value [[:pm :data :filter]] "text" filter-str nil]]
         pm-data-list (vals (:list pm-data))
-        _ (println (str "pm-data: " pm-data))
         filtered-list (if (clojure.string/blank? filter-str)
                          pm-data-list
                          (filter (fn [nv]
@@ -171,7 +171,6 @@
                                      #(nat-int? (.indexOf (.toLowerCase %) (.toLowerCase (.trim filter-str))))
                                      [(:name nv) (:value nv)])))
                                  pm-data-list))
-        _ (println (str "filtered: "(into [] filtered-list)))
         rows (map
               (fn [item]
                 [pm-row item (= (:id item) editing-id)])
@@ -179,14 +178,20 @@
     (into [] (concat [:div.container add-row filter-row] rows))))
 
 (defn admin-page [admin]
-  [:div.container
-   [:div.row
-    [:div.col-md-6
-     [:button {:on-click #(rf/dispatch [:admin-execute-script]) :type "button" } "Go"]
-     [:br]
-     [textarea-input :update-value [[:admin :script]] (:script admin) {:rows 10 :cols 50}]]
-    [:div.col-md-6
-     (if-let [loading? (:loading? admin)] "loading..." (str (:results admin)))]]])
+  (let [script-type0 (:script-type admin)
+        script-type (if script-type0 script-type0 (first commonutils/admin-script-types))]
+    [:div.container
+     [:div.row
+      [:div.col-md-6
+       [:select
+        {:value script-type
+         :on-change #(rf/dispatch [:update-value [:admin :script-type] (-> % .-target .-value)])}
+        (map-indexed (fn [idx val] [:option {:key (str "_admin_s_t_" idx)} val]) commonutils/admin-script-types)]
+       [:button {:on-click #(rf/dispatch [:admin-execute-script]) :type "button" } "Go"]
+       [:br]
+       [textarea-input :update-value [[:admin :script]] (:script admin) {:rows 10 :cols 50}]]
+      [:div.col-md-6
+       (if-let [loading? (:loading? admin)] "loading..." (str (:results admin)))]]]))
 
 (defn- is-admin?
   [auth] (and (:login? auth) (= "xuelin.wang@gmail.com" (:auth-name auth))))

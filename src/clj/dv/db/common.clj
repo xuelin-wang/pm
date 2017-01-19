@@ -102,8 +102,9 @@
             insert-strs-sql-0 "insert into strs_meta (strs_id, owner_type, strs_name, cardinality, optional, notes) values "]
         (doall (map (fn [sql] (j/execute! db [sql]))
                     ["insert into enc (enc_id, enc_name, notes) values (1, 'test', 'test')"
+                     (str insert-strs-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'admin-enc', 1, 0, 'admin-enc')")
                      (str insert-strs-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'password', 1, 0, 'password')")
-                     (str insert-strs-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'encryption', 10, 0, 'password')")
+                     (str insert-strs-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'encryption', 10, 0, 'encryption')")
                      (str insert-strs-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'default_list', 1000, 1, 'default list')")]))))))
 
 (defn migrate []

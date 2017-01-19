@@ -35,16 +35,7 @@
        (-> (response/ok (-> "docs/docs.md" io/resource slurp))
            (response/header "Content-Type" "text/plain; charset=utf-8"))))
 
-(defroutes pm-rest-routes
-  (GET "/admin" [query :as request]
-       (println "admin GET query: " query)
-       (let [results (admin/execute query)]
-         (response/ok results)))
-
-  (POST "/admin" [query :as request]
-        (println "admin POST query: " query)
-        (let [results {:data (admin/execute query)}]
-          (response/ok results)))
+(defroutes pm-get-routes
 
   (GET "/pm_get_list" [auth-name list-name :as request]
        (let [results {:data (pm/get-list auth-name list-name)}]
@@ -59,10 +50,24 @@
          (response/ok results)))
 
   (GET "/auth_login" [auth-name password :as request]
-       (print (str "login params: " auth-name "," password))
        (let [results {:data (auth/login auth-name password)}]
          (response/ok results)))
 
   (GET "/auth_logout" [auth-name :as request]
       (let [results {:data (auth/logout auth-name)}]
         (response/ok results))))
+
+(defroutes pm-post-routes
+
+  (POST "/admin" [p :as request]
+        (println "p type:" (type p) " and params: " p)
+        (println "vec in params: " (into [] (:params request)))
+        (println ":p - " (get (:params request) ":p"))
+        (println ":p2 - " (:p (:params request)))
+        (println ":p3 - " (get (:params request) "p"))
+        (println "admin POST form-params: " (:form-params request) "request: " request)
+        (let [param (json/parse-string p)
+              script-type (get param "script-type")
+              script (get param "script")
+              results {:data (admin/execute script-type script)}]
+          (response/ok results))))
