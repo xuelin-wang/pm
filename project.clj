@@ -39,11 +39,15 @@
                  [org.clojure/core.match "0.3.0-alpha4"]
                  [graphql-clj "0.1.20" :exclusions [org.clojure/clojure]]
                  [secretary "1.2.3"]
-                 [selmer "1.10.3"]]
+                 [selmer "1.10.3"]
+                 [junit/junit "4.12"]
+                 [com.google.guava/guava "19.0"]]
 
   :min-lein-version "2.0.0"
 
   :jvm-opts ["-server" "-Dconf=.lein-env"]
+  :java-source-paths ["src/java"]
+  :javac-options ["-target" "1.8" "-source" "1.8"]
   :source-paths ["src/clj" "src/cljc"]
   :resource-paths ["resources" "target/cljsbuild"]
   :target-path "target/%s/"
@@ -62,7 +66,7 @@
 
   :profiles
   {:uberjar {:omit-source true
-             :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
+             :prep-tasks [["javac"] ["compile"] ["cljsbuild" "once" "min"]]
              :cljsbuild
              {:builds
               {:min
@@ -130,4 +134,5 @@
 
 
    :profiles/dev {}
-   :profiles/test {}})
+   :profiles/test {}
+   :dontcare nil})

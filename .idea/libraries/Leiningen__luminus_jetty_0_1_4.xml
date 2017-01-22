@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: luminus-jetty:0.1.4">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/luminus-jetty/luminus-jetty/0.1.4/luminus-jetty-0.1.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

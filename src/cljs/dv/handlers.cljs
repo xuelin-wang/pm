@@ -86,10 +86,10 @@
  :process-login-response
  []
  (fn [{:keys [db]} [_ response]]
-   (let [login? (:data response)
+   (let [data (:data response)
          db1 (assoc-in db [:pm :auth :login :error]
                        (if login? "" "Email address or password doesn't match"))
-         db2 (assoc-in db1 [:pm :auth :login?] login?)]
+         db2 (assoc-in db [:pm :auth] (merge (get-in db1 [:pm :auth]) data))]
 
      (if login?
        {:db db2

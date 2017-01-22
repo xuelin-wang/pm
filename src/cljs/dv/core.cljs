@@ -41,7 +41,8 @@
 (defn navbar []
   (let
     [pm-auth @(rf/subscribe [:pm-auth])
-     login? (:login? pm-auth)]
+     login? (:login? pm-auth)
+     is-admin? [:is-admin? pm-auth]]
     (r/with-let [collapsed? (r/atom true)]
       [:nav.navbar.navbar-dark.bg-primary
        [:button.navbar-toggler.hidden-sm-up
@@ -50,7 +51,7 @@
         (when-not @collapsed? {:class "in"})
         [:ul.nav.navbar-nav
          [nav-link "#/pm" "Home" :pm collapsed?]
-         [maybe-nav-link login? "#/admin" "Admin" :admin collapsed?]
+         [maybe-nav-link is-admin? "#/admin" "Admin" :admin collapsed?]
          [maybe-nav-link login? "#/settings" "Settings" :settings collapsed?]
          [maybe-logout-link login?]]]])))
 
@@ -193,13 +194,10 @@
       [:div.col-md-6
        (if-let [loading? (:loading? admin)] "loading..." (str (:results admin)))]]]))
 
-(defn- is-admin?
-  [auth] (and (:login? auth) (= "xuelin.wang@gmail.com" (:auth-name auth))))
-
 (defn maybe-admin-page []
   (let [pm-auth @(rf/subscribe [:pm-auth])]
     (when
-      (is-admin? pm-auth)
+      (:is-admin? pm-auth)
       (let
         [admin @(rf/subscribe [:admin])]
         [admin-page admin]))))

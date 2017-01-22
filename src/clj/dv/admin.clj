@@ -4,6 +4,7 @@
    [clojure.java.jdbc :as j]
    [dv.db.common :as db]
    [dv.commonutils]
+   [dv.crypt]
    [clojure.spec :as s]))
 
 (defn- execute-sql-query [query]

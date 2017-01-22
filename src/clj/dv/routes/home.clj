@@ -60,12 +60,6 @@
 (defroutes pm-post-routes
 
   (POST "/admin" [p :as request]
-        (println "p type:" (type p) " and params: " p)
-        (println "vec in params: " (into [] (:params request)))
-        (println ":p - " (get (:params request) ":p"))
-        (println ":p2 - " (:p (:params request)))
-        (println ":p3 - " (get (:params request) "p"))
-        (println "admin POST form-params: " (:form-params request) "request: " request)
         (let [param (json/parse-string p)
               script-type (get param "script-type")
               script (get param "script")
