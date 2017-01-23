@@ -9,7 +9,7 @@
 (defn login [auth-name password]
   (let [db (db/db-conn)
         login? (db/valid-auth? db auth-name password)]
-    {:login? login? :is-admin? (and login? (is-admin? auth-name))}))
+    {:login? login? :is-admin? (and login? (is-admin? auth-name)) :auth-name auth-name}))
 
 (defn logout [auth-name]
   (let [db (db/db-conn)]

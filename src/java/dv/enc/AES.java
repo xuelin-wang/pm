@@ -11,13 +11,14 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 public class AES {
   private final SecretKey _key;
 
   public AES(String key) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-      byte[] keyBytes = CryptUtil.toHash(key, 16);
-      _key = new SecretKeySpec(keyBytes, "AES");
+      byte[] keyBytes = CryptUtil.toHash256(key);
+      _key = new SecretKeySpec(Arrays.copyOf(keyBytes, 16), "AES");
   }
 
   public String encrypt(String msg)

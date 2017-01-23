@@ -20,14 +20,13 @@ public class AESTest {
     public void testAes()
             throws UnsupportedEncodingException, NoSuchAlgorithmException,
             IllegalBlockSizeException, InvalidKeyException, BadPaddingException,
-            NoSuchPaddingException, InvalidAlgorithmParameterException
-    {
+            NoSuchPaddingException, InvalidAlgorithmParameterException {
         String[] testKeys = new String[]{"ab12cde456", "124", "bsfwfwfcq", "3243565474746758"};
         String[] texts = new String[]{"", "aaaaa", "bbbbb", "abcdefabcdef", "123ersdfcvsdfsdf f w fwf"};
 
-        for (String key: testKeys) {
+        for (String key : testKeys) {
             AES aes = new AES(key);
-            for (String text: texts) {
+            for (String text : texts) {
                 String cypher;
                 cypher = aes.encrypt(text);
                 Assert.assertEquals(text, aes.decrypt(cypher));

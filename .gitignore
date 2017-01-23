@@ -9,5 +9,6 @@ figwheel_server.log
 /.lein-*
 profiles.clj
 /.env
+/.idea
 .nrepl-port
 /log

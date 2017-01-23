@@ -11,11 +11,10 @@ import java.util.Arrays;
  * Created by xuelin on 1/21/17.
  */
 public class CryptUtil {
-    public static byte[] toHash(String str, int bytesCount) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    public static byte[] toHash256(String str) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         byte[] keyBytes = str.getBytes("UTF-8");
         MessageDigest sha = MessageDigest.getInstance("SHA-256");
-        byte[] digestBytes = sha.digest(keyBytes);
-        return Arrays.copyOf(digestBytes, bytesCount);
+        return sha.digest(keyBytes);
     }
 
     public static byte[] hexStringToBytes(String hexStr)

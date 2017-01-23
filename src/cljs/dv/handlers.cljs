@@ -87,6 +87,7 @@
  []
  (fn [{:keys [db]} [_ response]]
    (let [data (:data response)
+         login? (:login? data)
          db1 (assoc-in db [:pm :auth :login :error]
                        (if login? "" "Email address or password doesn't match"))
          db2 (assoc-in db [:pm :auth] (merge (get-in db1 [:pm :auth]) data))]
@@ -141,7 +142,9 @@
  []
  (fn [{:keys [db]} [_ list-name]]
    (let
-     [auth (get-in db [:pm :auth])]
+     [auth (get-in db [:pm :auth])
+      _ (println auth)
+      ]
      {:http-xhrio {:method          :get
                    :uri             "/pm_get_list"
                    :params          {:auth-name (:auth-name auth) :list-name list-name}
