@@ -13,6 +13,11 @@
 (defn home-page []
   (layout/render "home.html"))
 
+(defn get-current-auth-name [request]
+  (get-in request [:session :auth-name]))
+
+(def permission-denied {:error "Permission denied"})
+
 (defroutes home-routes
   (GET "/" []
        (home-page))
@@ -38,30 +43,42 @@
 (defroutes pm-get-routes
 
   (GET "/pm_get_list" [auth-name list-name :as request]
-       (let [results {:data (pm/get-list auth-name list-name)}]
+       (let [results
+             (if (nil? (get-current-auth-name request))
+               {:data permission-denied}
+               {:data (pm/get-list auth-name list-name)}) ]
          (response/ok results)))
 
   (GET "/pm_add_item" [auth-name list-name name value :as request]
-       (let [item-id {:data (pm/add-item-to-list auth-name list-name name value)}]
-         (response/ok {:id item-id})))
+    (if (nil? (get-current-auth-name request)) (response/ok {:data permission-denied})
+                                               (let [item-id {:data (pm/add-item-to-list auth-name list-name name value)}
+                                                     results {:id item-id}
+                                                     ]
+                                                 (response/ok {:id item-id})))
+      )
 
   (GET "/auth_register" [auth-name password :as request]
        (let [results {:data (auth/register auth-name password)}]
-         (response/ok results)))
+         (let [resp (response/ok results)] (assoc resp :session {:auth-name auth-name} ))
+         ))
 
   (GET "/auth_login" [auth-name password :as request]
        (let [results {:data (auth/login auth-name password)}]
-         (response/ok results)))
+         (let [resp (response/ok results)] (assoc resp :session {:auth-name auth-name} ))))
 
   (GET "/auth_logout" [auth-name :as request]
       (let [results {:data (auth/logout auth-name)}]
-        (response/ok results))))
+        (let [resp (response/ok results)] (assoc resp :session {:auth-name nil} ))
+        )))
 
 (defroutes pm-post-routes
 
   (POST "/admin" [p :as request]
-        (let [param (json/parse-string p)
-              script-type (get param "script-type")
-              script (get param "script")
-              results {:data (admin/execute script-type script)}]
-          (response/ok results))))
+    (if (auth/is-admin? (get-current-auth-name request))
+      (let [param (json/parse-string p)
+            script-type (get param "script-type")
+            script (get param "script")
+            results {:data (admin/execute script-type script)}]
+        (response/ok results))
+      (response/ok {:data permission-denied})
+      )))

@@ -43,7 +43,7 @@
       (handler req)
       (catch Throwable t
         (log/error t)
-        (response/ok {:error (.getMessage t) :data nil})))))
+        (response/ok {:failed true :error (.getMessage t) :data nil})))))
 
 (defn wrap-csrf [handler]
   (wrap-anti-forgery
