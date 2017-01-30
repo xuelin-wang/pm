@@ -1,40 +1,45 @@
 (ns dv.crypt
   (:require [goog.crypt]
             [goog.crypt.Aes]
-            [goog.crypt.Sha256]
-    ))
+            [goog.crypt.Sha256]))
 
-(defn byte-array-to-hex [bytes]
-  (goog.crypt/byteArrayToHex (clj->js bytes)))
+
+(defn byte-array-to-hex [bs]
+  (goog.crypt/byteArrayToHex (clj->js bs)))
 
 (defn hex-to-byte-array [hex-str]
   (js->clj (goog.crypt/hexToByteArray hex-str)))
 
-(defn byte-array-to-str [bytes]
-  (goog.crypt/byteArrayToString (clj->js bytes)))
+(defn byte-array-to-str [bs]
+  (goog.crypt/byteArrayToString (clj->js bs)))
 
-(defn str-to-byte-array [str]
-  (js->clj (goog.crypt/stringToByteArray str)))
+(defn str-to-byte-array [ss]
+  (js->clj (goog.crypt/stringToByteArray ss)))
 
-(defn to-hash256 [str]
+(defn js-to-hash256 [ss]
   (let [sha256 (goog.crypt.Sha256.)
-        bytes (goog.crypt/stringToByteArray str)
-        hash-bytes (.update sha256 bytes)]
-       (js->clj hash-bytes)
-    )
-  )
+        bs (goog.crypt/stringToByteArray ss)
+        _ (.update sha256 bs)]
+    (.digest sha256)))
+
+(defn padding-js-bytes
+  [bs target-len padding-byte]
+  (let [mod-len (mod (count bs) target-len)]
+    (if (zero? mod-len) bs
+      (.concat bs (clj->js (repeat (- target-len mod-len) padding-byte))))))
 
 (defn new-aes [key-str]
-  (let [sha256 (goog.crypt.Sha256.)
-        bytes (goog.crypt/stringToByteArray key-str)
-        hash-bytes (.update sha256 bytes)]
-    (goog.crypt.Aes. hash-bytes)
-    )
- )
+  (let [
+        hash-bytes (js-to-hash256 key-str)]
+    (goog.crypt.Aes. hash-bytes)))
 
-(defn aes-encrypt [aes txt]
-  (.encrypt aes txt))
+(defn aes-encrypt-js-bytes [aes js-bytes]
+  (.encrypt aes js-bytes))
 
-(defn aes-decrypt [aes txt]
-  (.decrypt aes txt))
+(defn aes-encrypt-str [aes ss]
+  (let [js-bytes (goog.crypt/stringToByteArray ss)
+        padded-bytes (padding-js-bytes js-bytes 16 0)]
+    (aes-encrypt-js-bytes aes padded-bytes)))
 
+(defn aes-decrypt-js-bytes [aes js-bytes]
+  (.decrypt aes js-bytes))

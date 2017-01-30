@@ -15,7 +15,7 @@
                  [metosin/ring-http-response "0.8.0"]
                  [mount "0.1.11"]
                  [org.clojure/clojure "1.9.0-alpha14"]
-                 [org.clojure/clojurescript "1.9.293" :scope "provided"]
+                 [org.clojure/clojurescript "1.9.456" :scope "provided"]
                  [org.clojure/tools.cli "0.3.5"]
                  [com.mchange/c3p0 "0.9.5.2"]
                  [org.postgresql/postgresql "9.4.1212"]
@@ -99,7 +99,7 @@
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.18.1"]
                                  [lein-doo "0.1.7"]
                                  [lein-figwheel "0.5.8"]
-                                 [org.clojure/clojurescript "1.9.293"]]
+                                 [org.clojure/clojurescript "1.9.456"]]
                   :cljsbuild
                   {:builds
                    {:app
