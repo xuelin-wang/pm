@@ -20,7 +20,7 @@
                  [com.mchange/c3p0 "0.9.5.2"]
                  [org.postgresql/postgresql "9.4.1212"]
                  [com.carouselapps/to-jdbc-uri "0.5.0"]
-                 [org.clojure/core.async "0.2.395"]
+                 [org.clojure/core.async "0.2.395" :exclusions [com.google.guava/guava]]
                  [org.clojure/java.jdbc "0.7.0-alpha1"]
                  [org.clojure/test.check "0.9.0"]
                  [org.clojure/tools.logging "0.3.1"]
@@ -41,7 +41,7 @@
                  [secretary "1.2.3"]
                  [selmer "1.10.3"]
                  [junit/junit "4.12"]
-                 [com.google.guava/guava "19.0"]]
+                 [com.google.guava/guava "20.0"]]
 
   :min-lein-version "2.0.0"
 
@@ -56,7 +56,8 @@
   :plugins [[lein-cprop "1.0.1"]
             [lein-cljsbuild "1.1.4"]]
   :clean-targets ^{:protect false}
-  [:target-path [:cljsbuild :builds :app :compiler :output-dir] [:cljsbuild :builds :app :compiler :output-to]]
+  [:target-path [:cljsbuild :builds :app :compiler :output-dir]
+   [:cljsbuild :builds :app :compiler :output-to]]
   :figwheel
   {:http-server-root "public"
    :nrepl-port 7002
