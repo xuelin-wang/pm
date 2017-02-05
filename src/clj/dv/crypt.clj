@@ -1,6 +1,6 @@
 (ns dv.crypt
-  (:import [dv.enc AES CryptUtil]
-           )
+  (:import [dv.enc AES CryptUtil])
+
   (:require
    [clojure.spec :as s]
    [dv.utils]))
@@ -22,12 +22,12 @@
   (.getBytes str))
 
 (defn to-hash256 [str]
-  (CryptUtil/toHash256 str)
-  )
+  (CryptUtil/toHash256 str))
+
 
 (defn new-aes [key]
-    (AES. key)
-  )
+    (AES. key))
+
 
 (defn aes-encrypt [aes txt]
   (.encrypt aes txt))

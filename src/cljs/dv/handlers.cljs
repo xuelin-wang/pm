@@ -161,7 +161,7 @@
    (let [new-item-id (get-in response [:data :id])
          new-row (get-in db [:pm :data :new-row])
          new-item (assoc new-row :id new-item-id)
-         pm-list (get-in db [:pm :data :list] {})]
+         pm-list (get-in db [:pm :data :list] {}) _]
      (assoc-in db [:pm :data :list] (merge pm-list {new-item-id new-item})))))
 
 (reg-event-fx
