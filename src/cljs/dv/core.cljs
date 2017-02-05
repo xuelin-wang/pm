@@ -35,7 +35,8 @@
   (let [maybe-logout-button
         (if login?
           [:a.nav-link.pointer
-            {:on-click #(rf/dispatch [:auth-logout]) } "Log out"] [:span "       "])]
+            {
+             :on-click #(rf/dispatch [:auth-logout]) } "Log out"] [:span "       "])]
     [:li.nav-item maybe-logout-button]))
 
 (defn navbar []
@@ -102,13 +103,14 @@
    [:div.row
     [:div.col-md-2]
     [:div.col-md-6
-     [:button {:on-click #(rf/dispatch [:auth-login]) :type "button" } "Login"]]]
+     [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:auth-login]) :type "button" } "Login"]]]
 
    [:div.row [:div.col-md-8 [:span.error (get-in pm-auth [:login :error])]]]
 
    [:div.row
     [:div.col-md-8 "Don't have an account? please "
-     [:a.pointer {:on-click #(rf/dispatch [:update-value [:pm :auth :registering?] true])} "register"]]]])
+     [:button.btn.btn-default.btn-sm
+      {:type "button" :on-click #(rf/dispatch [:update-value [:pm :auth :registering?] true])} "register"]]]])
 
 (defn pm-register [pm-auth]
   [:div.container
@@ -120,7 +122,7 @@
    [:div.row
     [:div.col-md-2]
     [:div.col-md-6
-     [:button {:on-click #(rf/dispatch [:auth-register]) :type "button" } "Register"]]]
+     [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:auth-register]) :type "button" } "Register"]]]
 
    [:div.row [:div.col-md-8 [:span.error (get-in pm-auth [:register :error])]]]
 
@@ -128,7 +130,9 @@
     [:div.col-md-8 "Please click the link as instructed in the confirmation email after registration"]]
    [:div.row
     [:div.col-md-8 "Already have an account? please "
-     [:a.pointer {:on-click #(rf/dispatch [:update-value [:pm :auth :registering?] false])} "login"]]]])
+     [:button.btn.btn-default.btn-sm
+      {:type "button" :on-click #(rf/dispatch [:update-value [:pm :auth :registering?] false])}
+      "login"]]]])
 
 (defn pm-editable-row [item]
   [:div.row
@@ -157,7 +161,7 @@
                  [:div.col-md-5 "Name: " [text-input :update-value [[:pm :data :new-row :name]] "text" new-row-name nil]]
                  [:div.col-md-5 "Value: " [text-input :update-value [[:pm :data :new-row :value]] "text" new-row-value nil]]
                  [:div.col-md-2
-                  [:button {:on-click #(rf/dispatch [:pm-add-item nil]) :type "button" } "Add"]]]
+                  [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:pm-add-item nil]) :type "button" } "Add"]]]
         filter-str (:filter pm-data)
         editing-id (:editing-id pm-data)
         filter-row [:div.row>div.col-md-12 "Filter: "
@@ -188,7 +192,7 @@
         {:value script-type
          :on-change #(rf/dispatch [:update-value [:admin :script-type] (-> % .-target .-value)])}
         (map-indexed (fn [idx val] [:option {:key (str "_admin_s_t_" idx)} val]) commonutils/admin-script-types)]
-       [:button {:on-click #(rf/dispatch [:admin-execute-script]) :type "button" } "Go"]
+       [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:admin-execute-script]) :type "button" } "Go"]
        [:br]
        [textarea-input :update-value [[:admin :script]] (:script admin) {:rows 10 :cols 50}]]
       [:div.col-md-6

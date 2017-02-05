@@ -2,7 +2,8 @@
   (:import
            (java.util UUID))
   (:require
-            [clojure.spec :as s]))
+   [clojure.spec :as s]))
+
 
 (defn new-uuid []
   (let [uuid-obj (UUID/randomUUID)

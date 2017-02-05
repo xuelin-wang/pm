@@ -99,17 +99,24 @@
   (let [inited? (db-inited? db)]
     (when-not inited?
       (let [
-            insert-strs-sql-0 "insert into strs_meta (strs_id, owner_type, strs_name, cardinality, optional, notes) values "]
+            list-list-strs-id  (dv.utils/new-uuid)
+            insert-strs-meta-sql-0 "insert into strs_meta (strs_id, owner_type, strs_name, cardinality, optional, notes) values "
+            insert-strs-sql-0 "insert into strs (owner_id, strs_id, str_id, str) values "]
         (doall (map (fn [sql] (j/execute! db [sql]))
                     ["insert into enc (enc_id, enc_name, notes) values (1, 'test', 'test')"
-                     (str insert-strs-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'admin-enc', 1, 0, 'admin-enc')")
-                     (str insert-strs-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'password', 1, 0, 'password')")
-                     (str insert-strs-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'encryption', 10, 0, 'encryption')")
-                     (str insert-strs-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'default_list', 1000, 1, 'default list')")]))))))
+                     (str insert-strs-meta-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'admin-enc', 1, 0, 'admin-enc')")
+                     (str insert-strs-meta-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'password', 1, 0, 'password')")
+                     (str insert-strs-meta-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'encryption', 10, 0, 'encryption')")
+                     (str insert-strs-meta-sql-0 " ('" list-list-strs-id "', 'auth', 'list_list', 1000, 1, 'list list')")
+                     (str insert-strs-sql-0 " ('', '" list-list-strs-id "', 0, 'default' )")
+                     (str insert-strs-sql-0 " ('', '" list-list-strs-id "', 1, '" (dv.utils/new-uuid) "' )")
+                     (str insert-strs-sql-0 " ('', '" list-list-strs-id "', 2, 'admin' )")
+                     (str insert-strs-sql-0 " ('', '" list-list-strs-id "', 3, '" (dv.utils/new-uuid) "' )")]))))))
+
 
 (defn migrate []
   (let [db (db-conn)]
-;    (drop-schemas db)
+    (drop-schemas db)
     (when-not (has-table? db "auth") (create-schema-auth db))
     (when-not (has-table? db "enc") (create-schema-enc db))
     (when-not (has-table? db "strs_meta") (create-schema-strs-meta db))
@@ -177,11 +184,17 @@
           strs-groups)]
     (into {} k-tuples)))
 
+(defn get-list-list [db]
+  (let
+    [tuples (strs-to-tuples (get-strs-by-owner-name db "" "auth" "list_list") [:name :value]) _ (print (str "tuples:" tuples))]
+    (into {} (map (fn [tuple] [(:name tuple) (:value tuple)]) (vals tuples)))))
+
 (defn get-list [db owner-id list-name]
   {:pre [(s/valid? string? owner-id) (s/valid? string? list-name)]}
   (let [
-        list-id (get-strs-id db "auth" list-name)
-        list-strs (get-strs db owner-id list-id)] (strs-to-tuples list-strs [:name :value])))
+        list-id (get (get-list-list db) list-name)
+        list-strs (get-strs db owner-id list-id)]
+    (strs-to-tuples list-strs [:name :value])))
 
 (defn- get-auth-id [db auth-name]
   {:pre (s/valid? string? auth-name)}

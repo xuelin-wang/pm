@@ -102,7 +102,7 @@
  []
  (fn [{:keys [db]} [_]]
    (let
-     [auth (get-in db [:pm :auth]) _ (println (str auth))]
+     [auth (get-in db [:pm :auth])]
      {:http-xhrio {:method          :get
                    :uri             "/auth_login"
                    :params          (select-keys auth [:auth-name :password])
@@ -127,7 +127,9 @@
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      [:dummy]
                    :on-failure      [:dummy]}
-      :db  (assoc-in db [:pm :auth :login?] false)})))
+      :db (-> db
+              (assoc-in [:pm :auth] {})
+              (assoc-in [:pm :auth :login?] false))})))
 
 (reg-event-db
  :process-pm-list-response
@@ -142,9 +144,8 @@
  []
  (fn [{:keys [db]} [_ list-name]]
    (let
-     [auth (get-in db [:pm :auth])
-      _ (println auth)
-      ]
+     [auth (get-in db [:pm :auth])]
+
      {:http-xhrio {:method          :get
                    :uri             "/pm_get_list"
                    :params          {:auth-name (:auth-name auth) :list-name list-name}

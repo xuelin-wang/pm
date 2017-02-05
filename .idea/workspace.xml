@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ad241be8-9f5c-4ec2-878e-32325ef0ba59" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/java/dv/util/Gmail.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project.clj" afterPath="$PROJECT_DIR$/project.clj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cljs/dv/crypt.cljs" afterPath="$PROJECT_DIR$/src/cljs/dv/crypt.cljs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/public/css/screen.css" afterPath="$PROJECT_DIR$/resources/public/css/screen.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/clj/dv/utils.clj" afterPath="$PROJECT_DIR$/src/clj/dv/utils.clj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cljs/dv/core.cljs" afterPath="$PROJECT_DIR$/src/cljs/dv/core.cljs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cljs/dv/handlers.cljs" afterPath="$PROJECT_DIR$/src/cljs/dv/handlers.cljs" />
     </list>
     <ignored path="pm.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -99,7 +102,7 @@
         <entry file="file://$PROJECT_DIR$/src/cljs/dv/handlers.cljs">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="89" column="30" selection-start-line="89" selection-start-column="30" selection-end-line="89" selection-end-column="30" />
+              <caret line="90" column="30" selection-start-line="90" selection-start-column="30" selection-end-line="90" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -149,8 +152,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="219" />
-    <option name="y" value="32" />
+    <option name="x" value="52" />
+    <option name="y" value="33" />
     <option name="width" value="1263" />
     <option name="height" value="619" />
   </component>
@@ -797,7 +800,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="219" y="32" width="1263" height="619" extended-state="0" />
+    <frame x="52" y="33" width="1263" height="619" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1096,7 +1099,7 @@
     <entry file="file://$PROJECT_DIR$/src/cljs/dv/handlers.cljs">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="89" column="30" selection-start-line="89" selection-start-column="30" selection-end-line="89" selection-end-column="30" />
+          <caret line="90" column="30" selection-start-line="90" selection-start-column="30" selection-end-line="90" selection-end-column="30" />
           <folding />
         </state>
       </provider>

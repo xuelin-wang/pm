@@ -41,6 +41,8 @@
                  [secretary "1.2.3"]
                  [selmer "1.10.3"]
                  [junit/junit "4.12"]
+                 [javax.mail/mail "1.4.7"]
+                 [javax.mail/javax.mail-api "1.5.6"]
                  [com.google.guava/guava "20.0"]]
 
   :min-lein-version "2.0.0"

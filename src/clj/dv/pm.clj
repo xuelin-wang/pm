@@ -1,19 +1,30 @@
 (ns dv.pm
+  (:import
+   (dv.util Gmail))
   (:require
    [dv.db.common :as db]
    [clojure.string]
    [clojure.spec :as s]))
 
 (defn- get-list-name [type list-name0]
-  (if (clojure.string/blank? list-name0) "default_list" list-name0))
+  (if (clojure.string/blank? list-name0) "default" list-name0))
 
 (defn add-item-to-list [auth-name list-name0 name value]
   (let [db (db/db-conn)
         list-name (get-list-name "auth" list-name0)
-        list-id (db/get-strs-id db "auth" list-name)]
+        list-list (db/get-list-list db)
+        _ (print (str "list-list" list-list))
+        list-id (get list-list list-name)]
     (db/append-strs db auth-name list-id [name value])))
 
 (defn get-list [auth-name list-name0]
   (let [db (db/db-conn)
         list-name (get-list-name "auth" list-name0)]
     (db/get-list db auth-name list-name)))
+
+(defn send-mail [tos ccs subject body mime-type]
+  (let [db (db/db-conn)
+        admin-strs (db/get-list db "" "admin")
+        sender (:value (filter #(= (:name %) "gmail_sender")))
+        sender-pw (:value (filter #(= (:name %) "gmail_sender_password")))]
+    (Gmail/send sender sender-pw tos ccs subject body mime-type)))
