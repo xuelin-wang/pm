@@ -38,12 +38,14 @@ public class Gmail {
     		generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to.trim()));
     }
 
-    String[] ccsArr = ccs.split(",");
-    for (String cc: ccsArr) {
-        if (cc == null || cc.trim().length() == 0) {
-            continue;
-        }
-    		generateMailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(cc.trim()));
+    if (ccs != null) {
+      String[] ccsArr = ccs.split(",");
+      for (String cc: ccsArr) {
+          if (cc == null || cc.trim().length() == 0) {
+              continue;
+          }
+      		generateMailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(cc.trim()));
+      }
     }
 
 		generateMailMessage.setSubject(subject);

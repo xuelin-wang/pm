@@ -46,30 +46,39 @@
        (let [results
              (if (nil? (get-current-auth-name request))
                {:data permission-denied}
-               {:data (pm/get-list auth-name list-name)}) ]
+               {:data (pm/get-list auth-name list-name)})]
          (response/ok results)))
 
   (GET "/pm_add_item" [auth-name list-name name value :as request]
-    (if (nil? (get-current-auth-name request)) (response/ok {:data permission-denied})
-                                               (let [item-id {:data (pm/add-item-to-list auth-name list-name name value)}
-                                                     results {:id item-id}
-                                                     ]
-                                                 (response/ok {:id item-id})))
-      )
+       (if (nil? (get-current-auth-name request)) (response/ok {:data permission-denied})
+         (let [item-id {:data (pm/add-item-to-list auth-name list-name name value)}
+               results {:id item-id}]
+
+           (response/ok {:id item-id}))))
+
 
   (GET "/auth_register" [auth-name password :as request]
-       (let [results {:data (auth/register auth-name password)}]
-         (let [resp (response/ok results)] (assoc resp :session {:auth-name auth-name} ))
-         ))
+       (let [base-url
+             (str (-> request :scheme name)
+                  "://"
+                  (get-in request [:headers "host"]))
+             results {:data (auth/register auth-name password base-url)}]
+         (let [resp (response/ok results)] resp)))
+
+  (GET "/auth_confirm_registration" [auth-id confirm :as request]
+       (let [
+             results {:data (auth/confirm-registration auth-id confirm)}]
+         (let [resp (response/ok results)] resp)))
+
 
   (GET "/auth_login" [auth-name password :as request]
        (let [results {:data (auth/login auth-name password)}]
-         (let [resp (response/ok results)] (assoc resp :session {:auth-name auth-name} ))))
+         (let [resp (response/ok results)] (assoc resp :session {:auth-name auth-name}))))
 
   (GET "/auth_logout" [auth-name :as request]
-      (let [results {:data (auth/logout auth-name)}]
-        (let [resp (response/ok results)] (assoc resp :session {:auth-name nil} ))
-        )))
+       (let [results {:data (auth/logout auth-name)}]
+         (let [resp (response/ok results)] (assoc resp :session {:auth-name nil})))))
+
 
 (defroutes pm-post-routes
 
@@ -80,5 +89,4 @@
             script (get param "script")
             results {:data (admin/execute script-type script)}]
         (response/ok results))
-      (response/ok {:data permission-denied})
-      )))
+      (response/ok {:data permission-denied}))))
