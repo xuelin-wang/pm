@@ -18,14 +18,17 @@
 
 (defn register [auth-name password base-url]
   (let [db (db/db-conn)
-        {:keys [auth-id confirm]} (db/add-auth db auth-name password)
-        confirm-link (str base-url "/auth_confirm_registration?auth-id=" auth-id "&confirm=" confirm)
-        register-mail-body (str "Please confirm your password manager account registration by clicking the following link: \n"
-                                confirm-link "\n Regards\nXlpm team\n")
-        _ (dv.mail/send-mail auth-name nil "Please confirm password manager registration"
-                             register-mail-body
-                             "text/plain")]
-    (db/add-auth db auth-name password)))
+        confirm? (or (not (is-admin? auth-name)) (db/has-auth? db))
+
+        {:keys [auth-id confirm]} (db/add-auth db auth-name password (if confirm? 0 1))]
+    (when confirm?
+      (let [confirm-link (str base-url "/auth_confirm_registration?auth-id=" auth-id "&confirm=" confirm)
+            register-mail-body (str "Please confirm your password manager account registration by clicking the following link: \n"
+                                    confirm-link "\n Regards\nXlpm team\n")]
+        (dv.mail/send-mail auth-name nil "Please confirm password manager registration"
+                           register-mail-body
+                           "text/plain")))
+    {:auth-id auth-id}))
 
 (defn confirm-registration [auth-id confirm]
   (let [

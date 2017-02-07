@@ -1,5 +1,6 @@
 (ns dv.handlers
   (:require [dv.db :as db]
+            [dv.crypt]
             [ajax.core :as ajax]
             [day8.re-frame.http-fx]
             [re-frame.core :refer [dispatch reg-event-db reg-event-fx]]))
@@ -60,12 +61,13 @@
          new-db (-> db
                     (assoc-in [:pm :auth :regestring?] false)
                     (assoc-in [:pm :auth :register :error]
-                              (if registered? "" "There exists an account for the email address already"))
-                    (assoc-in [:pm :auth :login?] registered?))]
-     (if registered?
-       {:db new-db
-         :dispatch [:pm-get-list nil]}
-       {:db new-db}))))
+                              (if registered? "" "There exists an account for the email address already")))]
+     {:db new-db})))
+
+
+
+(defn hash-auth [auth]
+  {:auth-name (:auth-name auth) :password (dv.crypt/to-hash256-str (:password auth))})
 
 (reg-event-fx
  :auth-register
@@ -75,7 +77,7 @@
      [auth (get-in db [:pm :auth])]
      {:http-xhrio {:method          :get
                    :uri             "/auth_register"
-                   :params          (select-keys auth [:auth-name :password])
+                   :params          (hash-auth auth)
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      [:process-register-response]
                    :on-failure      [:process-register-response]}
@@ -105,7 +107,7 @@
      [auth (get-in db [:pm :auth])]
      {:http-xhrio {:method          :get
                    :uri             "/auth_login"
-                   :params          (select-keys auth [:auth-name :password])
+                   :params          (hash-auth auth)
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      [:process-login-response]
                    :on-failure      [:process-login-response]}})))
@@ -158,10 +160,11 @@
  :process-pm-add-item-response
  []
  (fn [db [_ response]]
-   (let [new-item-id (get-in response [:data :id])
+   (let [new-item-id (:id response)
          new-row (get-in db [:pm :data :new-row])
          new-item (assoc new-row :id new-item-id)
          pm-list (get-in db [:pm :data :list] {})]
+
      (assoc-in db [:pm :data :list] (merge pm-list {new-item-id new-item})))))
 
 (reg-event-fx

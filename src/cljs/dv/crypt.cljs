@@ -22,6 +22,10 @@
         _ (.update sha256 bs)]
     (.digest sha256)))
 
+(defn to-hash256-str [ss]
+  (goog.crypt/byteArrayToString (js-to-hash256 ss)))
+
+
 (defn padding-js-bytes
   [bs target-len padding-byte]
   (let [mod-len (mod (count bs) target-len)]

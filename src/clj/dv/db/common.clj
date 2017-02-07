@@ -84,6 +84,11 @@
         results (j/query db [sql])]
     (pos? (:count (first results)))))
 
+(defn has-auth? [db]
+  (let [sql "select count(*) as count from auth"
+        results (j/query db [sql])]
+    (pos? (:count (first results)))))
+
 (defn- drop-schema [db table-name]
   (j/db-do-commands db (j/drop-table-ddl table-name)))
 
@@ -226,7 +231,7 @@
   (let [curr-auths (j/query db ["select * from auth where verified = 1 and auth_name = ?" auth-name])]
     (seq curr-auths)))
 
-(defn add-auth [db auth-name password]
+(defn add-auth [db auth-name password verified]
   {:pre [(s/valid? string? auth-name) (s/valid? string? password)]}
   (if (exists-auth? db auth-name)
     nil
@@ -235,7 +240,7 @@
           curr-millis (System/currentTimeMillis)
           confirm (dv.crypt/aes-encrypt (dv.crypt/new-aes uuid) (str curr-millis))
           pw-strs-id (get-password-strs-id db)]
-      (j/insert! db :auth {:auth_id uuid :verified 0 :auth_name auth-name})
+      (j/insert! db :auth {:auth_id uuid :verified verified :auth_name auth-name})
       (save-strs db uuid pw-strs-id [password])
       {:auth-id uuid :confirm confirm})))
 

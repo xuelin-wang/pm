@@ -179,7 +179,7 @@
         rows (map
               (fn [item]
                 [pm-row item (= (:id item) editing-id)])
-              filtered-list)]
+              (sort-by :name filtered-list))]
     (into [] (concat [:div.container add-row filter-row] rows))))
 
 (defn admin-page [admin]
