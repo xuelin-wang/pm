@@ -68,7 +68,11 @@
                                 "")))]
      {:db new-db})))
 
-
+(defn validate-auth [{:keys [auth-name password]}]
+  (cond
+    (not (re-matches #"[^@]+@[^.]+\..+" auth-name)) "Please use a valid email address as your user name"
+    (< (count password) 8) "Password length must be at least 8"
+    :else nil))
 
 (defn hash-auth [auth]
   {:auth-name (:auth-name auth) :password
@@ -93,16 +97,17 @@
  :auth-register
  []
  (fn [{:keys [db]} [_]]
-   (let
-     [auth (get-in db [:pm :auth])]
-     {:http-xhrio {:method          :get
-                   :uri             "/auth_register"
-                   :params          (hash-auth auth)
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success      [:process-register-response]
-                   :on-failure      [:process-register-response]}
-      :db  (assoc-in db [:auth :loading?] true)})))
-
+   (let [auth (get-in db [:pm :auth])
+         msg (validate-auth auth)]
+     (if (nil? msg)
+       {:http-xhrio {:method          :get
+                     :uri             "/auth_register"
+                     :params          (hash-auth auth)
+                     :response-format (ajax/json-response-format {:keywords? true})
+                     :on-success      [:process-register-response]
+                     :on-failure      [:process-register-response]}
+        :db  (assoc-in db [:pm :auth :register :msg] "Registering, please wait...")}
+       {:db (assoc-in db [:pm :auth :register :error] msg)}))))
 
 (reg-event-fx
  :process-login-response

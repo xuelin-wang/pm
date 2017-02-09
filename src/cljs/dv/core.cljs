@@ -142,7 +142,10 @@
    [:div.row
     [:div.col-md-2]
     [:div.col-md-6
-     [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:auth-register]) :type "button" } "Register"]]]
+     [:button.btn.btn-default.btn-sm
+      {:on-click
+       #(rf/dispatch [:auth-register])
+       :type "button" } "Register"]]]
 
    [:div.row [:div.col-md-8 [:span.error (get-in pm-auth [:register :error])]]]
    [:div.row [:div.col-md-8 [:span.message (get-in pm-auth [:register :msg])]]]
