@@ -33,7 +33,7 @@
 
 (defn new-aes [key-str]
   (let [
-        hash-bytes (byte-array-to-hash256 (str-to-byte-array key-str false))]
+        hash-bytes (byte-array-to-hash256 (str-to-byte-array key-str false) true)]
     (goog.crypt.Aes. hash-bytes)))
 
 (defn aes-encrypt-bytes [aes bytes js?]
