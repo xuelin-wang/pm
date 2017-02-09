@@ -41,7 +41,7 @@
 
 (defn aes-encrypt-str [aes ss]
   (let [js-bytes (str-to-byte-array ss true)
-        padded-bytes (padding-js-bytes js-bytes 16 0)]
+        padded-bytes (padding-js-bytes js-bytes 16 32)]
     (aes-encrypt-bytes aes padded-bytes true)))
 
 (defn aes-decrypt-bytes [aes bytes js?]

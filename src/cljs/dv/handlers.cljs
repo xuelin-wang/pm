@@ -4,6 +4,7 @@
             [ajax.core :as ajax]
             [day8.re-frame.http-fx]
             [goog.crypt]
+            [clojure.string]
             [re-frame.core :refer [dispatch reg-event-db reg-event-fx]]))
 
 (reg-event-db
@@ -83,12 +84,12 @@
        (dv.crypt/byte-array-to-hex true))})
 
 
-(defn encrypt [vals key]
-  (let [aes (dv.crypt/new-aes key)]
+(defn encrypt [vals k]
+  (let [aes (dv.crypt/new-aes k)]
     (map #(dv.crypt/byte-array-to-hex (dv.crypt/aes-encrypt-str aes %) true) vals)))
 
-(defn decrypt [vals key]
-  (let [aes (dv.crypt/new-aes key)]
+(defn decrypt [vals k]
+  (let [aes (dv.crypt/new-aes k)]
     (map
      #(dv.crypt/byte-array-to-str (dv.crypt/aes-decrypt-bytes aes (dv.crypt/hex-to-byte-array % true) true) true)
      vals)))
@@ -156,15 +157,14 @@
                    :on-failure      [:dummy]}
       :db dv.db/default-db})))
 
-(defn decrypt-list [id-to-list key]
+(defn decrypt-list [id-to-list k]
               (let [entries (into [] id-to-list)
                     decoded-entries (map
-                                     (fn [key {:keys [name value]}]
-                                       (let [[decoded-name decoded-value] (decrypt [name value] key)]
-                                         (key {:name decoded-name :value decoded-value}))
-                                       [key {:name :value}])
+                                     (fn [[id {:keys [name value]}]]
+                                       (let [[decoded-name decoded-value] (decrypt [name value] k)]
+                                         [id {:name (clojure.string/trim decoded-name) :value (clojure.string/trim decoded-value) :id id}]))
                                      entries)]
-                (into {} decoded-entries)))
+                (into {} (into [] decoded-entries))))
 
 (reg-event-db
  :process-pm-list-response
@@ -205,8 +205,8 @@
  []
  (fn [{:keys [db]} [_ list-name]]
    (let
-     [new-row (get-in db [:pm :data :new-row])
-      [encoded-name encoded-val] (encrypt [(:name new-row) (:value new-row)] (get-in db [:pm :auth :password]))
+     [{:keys [name value]} (get-in db [:pm :data :new-row])
+      [encoded-name encoded-val] (encrypt [name value] (get-in db [:pm :auth :password]))
       encoded-new-row {:name encoded-name :value encoded-val}]
      {:http-xhrio {:method          :get
                    :uri             "/pm_add_item"
