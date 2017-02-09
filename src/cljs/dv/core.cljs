@@ -52,16 +52,10 @@
         (when-not @collapsed? {:class "in"})
         [:ul.nav.navbar-nav
          [nav-link "#/pm" "Home" :pm collapsed?]
-         [maybe-nav-link is-admin? "#/admin" "Admin" :admin collapsed?]
          [maybe-nav-link login? "#/settings" "Settings" :settings collapsed?]
          [maybe-logout-link login?]]]])))
 
 
-(defn settings-page []
-  [:div.container
-   [:div.row
-    [:div.col-md-12
-     "this is the settings of pm... work in progress"]]])
 
 (defn- text-input [event-id event-params input-type init-val props]
   (let [val (r/atom init-val)
@@ -92,6 +86,32 @@
          :on-change #(reset! val (-> % .-target .-value))
          :on-key-up #(reset! val (-> % .-target .-value))}
         props)]))
+
+(defn admin-page [admin]
+  (let [script-type0 (:script-type admin)
+        script-type (if script-type0 script-type0 (first commonutils/admin-script-types))]
+    [:div.container
+     [:div.row
+      [:div.col-md-6
+       [:select
+        {:value script-type
+         :on-change #(rf/dispatch [:update-value [:admin :script-type] (-> % .-target .-value)])}
+        (map-indexed (fn [idx val] [:option {:key (str "_admin_s_t_" idx)} val]) commonutils/admin-script-types)]
+       [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:admin-execute-script]) :type "button" } "Go"]
+       [:br]
+       [textarea-input :update-value [[:admin :script]] (:script admin) {:rows 10 :cols 50}]]
+      [:div.col-md-6
+       (if-let [loading? (:loading? admin)] "loading..." (str (:results admin)))]]]))
+
+(defn settings-page []
+  (let [pm-auth @(rf/subscribe [:pm-auth])]
+    [:div.container
+     (when
+       (:is-admin? pm-auth)
+       (let
+         [admin @(rf/subscribe [:admin])]
+         [admin-page admin]))
+     [:div.row [:div.col-md-6 [:span "Settings:"]]]]))
 
 (defn pm-login [pm-auth]
   [:div.container
@@ -125,9 +145,8 @@
      [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:auth-register]) :type "button" } "Register"]]]
 
    [:div.row [:div.col-md-8 [:span.error (get-in pm-auth [:register :error])]]]
+   [:div.row [:div.col-md-8 [:span.message (get-in pm-auth [:register :msg])]]]
 
-   [:div.row
-    [:div.col-md-8 "Please click the link as instructed in the confirmation email after registration"]]
    [:div.row
     [:div.col-md-8 "Already have an account? please "
      [:button.btn.btn-default.btn-sm
@@ -182,32 +201,9 @@
               (sort-by :name filtered-list))]
     (into [] (concat [:div.container add-row filter-row] rows))))
 
-(defn admin-page [admin]
-  (let [script-type0 (:script-type admin)
-        script-type (if script-type0 script-type0 (first commonutils/admin-script-types))]
-    [:div.container
-     [:div.row
-      [:div.col-md-6
-       [:select
-        {:value script-type
-         :on-change #(rf/dispatch [:update-value [:admin :script-type] (-> % .-target .-value)])}
-        (map-indexed (fn [idx val] [:option {:key (str "_admin_s_t_" idx)} val]) commonutils/admin-script-types)]
-       [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:admin-execute-script]) :type "button" } "Go"]
-       [:br]
-       [textarea-input :update-value [[:admin :script]] (:script admin) {:rows 10 :cols 50}]]
-      [:div.col-md-6
-       (if-let [loading? (:loading? admin)] "loading..." (str (:results admin)))]]]))
-
-(defn maybe-admin-page []
-  (let [pm-auth @(rf/subscribe [:pm-auth])]
-    (when
-      (:is-admin? pm-auth)
-      (let
-        [admin @(rf/subscribe [:admin])]
-        [admin-page admin]))))
-
 (defn pm-page []
-  (let [pm-auth @(rf/subscribe [:pm-auth])]
+  (let [pm @(rf/subscribe [:pm])
+        pm-auth (:auth pm)]
     (cond
       (:login? pm-auth) [pm-data]
       (:registering? pm-auth) [pm-register pm-auth]
@@ -223,7 +219,6 @@
 (def pages
   {:home #'home-page
    :pm #'pm-page
-   :admin #'maybe-admin-page
    :settings #'settings-page})
 
 (defn page []
@@ -240,9 +235,6 @@
 
 (secretary/defroute "/pm" []
   (rf/dispatch [:update-value [:page] :pm]))
-
-(secretary/defroute "/admin" []
-  (rf/dispatch [:update-value [:page] :admin]))
 
 (secretary/defroute "/settings" []
   (rf/dispatch [:update-value [:page] :settings]))

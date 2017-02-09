@@ -22,6 +22,9 @@ body {
 .error {
   color: red;
 }
+.message {
+  color: rust;
+}
 .pointer {
   cursor: pointer;
 }

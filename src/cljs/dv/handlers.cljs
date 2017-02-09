@@ -1,14 +1,15 @@
 (ns dv.handlers
-  (:require [dv.db :as db]
+  (:require [dv.db]
             [dv.crypt]
             [ajax.core :as ajax]
             [day8.re-frame.http-fx]
+            [goog.crypt]
             [re-frame.core :refer [dispatch reg-event-db reg-event-fx]]))
 
 (reg-event-db
   :initialize-db
   (fn [_ _]
-    db/default-db))
+    dv.db/default-db))
 
 (reg-event-db
  :update-value
@@ -61,13 +62,32 @@
          new-db (-> db
                     (assoc-in [:pm :auth :regestring?] false)
                     (assoc-in [:pm :auth :register :error]
-                              (if registered? "" "There exists an account for the email address already")))]
+                              (if registered? "" "There exists an account for the email address already"))
+                    (assoc-in [:pm :auth :register :msg]
+                              (if registered? "Please check your email and click the confirm link"
+                                "")))]
      {:db new-db})))
 
 
 
 (defn hash-auth [auth]
-  {:auth-name (:auth-name auth) :password (dv.crypt/to-hash256-str (:password auth))})
+  {:auth-name (:auth-name auth) :password
+   (-> (:password auth)
+       (dv.crypt/str-to-byte-array true)
+       (dv.crypt/byte-array-to-hash256 true)
+       (dv.crypt/byte-array-to-hash256 true)
+       (dv.crypt/byte-array-to-hex true))})
+
+
+(defn encrypt [vals key]
+  (let [aes (dv.crypt/new-aes key)]
+    (map #(dv.crypt/byte-array-to-hex (dv.crypt/aes-encrypt-str aes %) true) vals)))
+
+(defn decrypt [vals key]
+  (let [aes (dv.crypt/new-aes key)]
+    (map
+     #(dv.crypt/byte-array-to-str (dv.crypt/aes-decrypt-bytes aes (dv.crypt/hex-to-byte-array % true) true) true)
+     vals)))
 
 (reg-event-fx
  :auth-register
@@ -129,9 +149,17 @@
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      [:dummy]
                    :on-failure      [:dummy]}
-      :db (-> db
-              (assoc-in [:pm :auth] {})
-              (assoc-in [:pm :auth :login?] false))})))
+      :db dv.db/default-db})))
+
+(defn decrypt-list [id-to-list key]
+              (let [entries (into [] id-to-list)
+                    decoded-entries (map
+                                     (fn [key {:keys [name value]}]
+                                       (let [[decoded-name decoded-value] (decrypt [name value] key)]
+                                         (key {:name decoded-name :value decoded-value}))
+                                       [key {:name :value}])
+                                     entries)]
+                (into {} decoded-entries)))
 
 (reg-event-db
  :process-pm-list-response
@@ -139,7 +167,7 @@
  (fn [db [_ response]]
    (-> db
        (assoc-in [:pm :data :loading?] false)
-       (assoc-in [:pm :data :list] (:data response)))))
+       (assoc-in [:pm :data :list] (decrypt-list (:data response) (get-in db [:pm :auth :password]))))))
 
 (reg-event-fx
  :pm-get-list
@@ -172,10 +200,12 @@
  []
  (fn [{:keys [db]} [_ list-name]]
    (let
-     [new-row (get-in db [:pm :data :new-row])]
+     [new-row (get-in db [:pm :data :new-row])
+      [encoded-name encoded-val] (encrypt [(:name new-row) (:value new-row)] (get-in db [:pm :auth :password]))
+      encoded-new-row {:name encoded-name :value encoded-val}]
      {:http-xhrio {:method          :get
                    :uri             "/pm_add_item"
-                   :params          (assoc new-row :list-name list-name :auth-name (get-in db [:pm :auth :auth-name]))
+                   :params          (assoc encoded-new-row :list-name list-name :auth-name (get-in db [:pm :auth :auth-name]))
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      [:process-pm-add-item-response]
                    :on-failure      [nil]}

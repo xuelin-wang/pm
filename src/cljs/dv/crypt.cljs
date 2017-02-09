@@ -4,29 +4,28 @@
             [goog.crypt.Sha256]))
 
 
-(defn byte-array-to-hex [bs]
-  (goog.crypt/byteArrayToHex (clj->js bs)))
+(defn byte-array-to-hex [bs js?]
+  (goog.crypt/byteArrayToHex (if js? bs (clj->js bs))))
 
-(defn hex-to-byte-array [hex-str]
-  (js->clj (goog.crypt/hexToByteArray hex-str)))
+(defn hex-to-byte-array [hex-str js?]
+  (let [bs (goog.crypt/hexToByteArray hex-str)]
+    (if js? bs (js->clj bs))))
 
-(defn byte-array-to-str [bs]
-  (goog.crypt/byteArrayToString (clj->js bs)))
+(defn byte-array-to-str [bs js?]
+  (goog.crypt/byteArrayToString (if js? bs (clj->js bs))))
 
-(defn str-to-byte-array [ss]
-  (js->clj (goog.crypt/stringToByteArray ss)))
+(defn str-to-byte-array [ss js?]
+  (let [bs (goog.crypt/stringToByteArray ss)]
+    (if js? bs (js->clj bs))))
 
-(defn js-to-hash256 [ss]
+(defn byte-array-to-hash256 [bs js?]
   (let [sha256 (goog.crypt.Sha256.)
-        bs (goog.crypt/stringToByteArray ss)
-        _ (.update sha256 bs)]
-    (.digest sha256)))
+        bs (if js? bs (clj->js bs))
+        _ (.update sha256 bs)
+        hash-bytes (.digest sha256)]
+    (if js? hash-bytes (clj->js hash-bytes))))
 
-(defn to-hash256-str [ss]
-  (goog.crypt/byteArrayToString (js-to-hash256 ss)))
-
-
-(defn padding-js-bytes
+(defn- padding-js-bytes
   [bs target-len padding-byte]
   (let [mod-len (mod (count bs) target-len)]
     (if (zero? mod-len) bs
@@ -34,16 +33,16 @@
 
 (defn new-aes [key-str]
   (let [
-        hash-bytes (js-to-hash256 key-str)]
+        hash-bytes (byte-array-to-hash256 (str-to-byte-array key-str false))]
     (goog.crypt.Aes. hash-bytes)))
 
-(defn aes-encrypt-js-bytes [aes js-bytes]
-  (.encrypt aes js-bytes))
+(defn aes-encrypt-bytes [aes bytes js?]
+  (.encrypt aes (if js? bytes (clj->js bytes))))
 
 (defn aes-encrypt-str [aes ss]
-  (let [js-bytes (goog.crypt/stringToByteArray ss)
+  (let [js-bytes (str-to-byte-array ss true)
         padded-bytes (padding-js-bytes js-bytes 16 0)]
-    (aes-encrypt-js-bytes aes padded-bytes)))
+    (aes-encrypt-bytes aes padded-bytes true)))
 
-(defn aes-decrypt-js-bytes [aes js-bytes]
-  (.decrypt aes js-bytes))
+(defn aes-decrypt-bytes [aes bytes js?]
+  (.decrypt aes (if js? bytes (clj->js bytes))))
