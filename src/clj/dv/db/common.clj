@@ -177,6 +177,15 @@
        strs))
     next-str-id))
 
+(defn update-strs [db owner-id strs-id str-id strs]
+  {:pre [(s/valid? string? owner-id) (s/valid? string? strs-id)]}
+  (doall
+    (map-indexed
+     (fn [idx item]
+       (j/execute! db ["update strs set str = ? where owner_id = ? and strs_id = ? and str_id = ?",
+                       item, owner-id, strs-id, (+ (Integer/parseInt str-id) idx)]))
+     strs)))
+
 (defn- strs-to-tuples [strs tuple-elements]
   {:pre [(s/valid? pos? (count tuple-elements)) (= 0 (mod (count strs) (count tuple-elements)))]}
   (let [elem-cnt (count tuple-elements)
@@ -192,7 +201,7 @@
 
 (defn get-list-list [db]
   (let
-    [tuples (strs-to-tuples (get-strs-by-owner-name db "" "auth" "list_list") [:name :value]) _ (print (str "tuples:" tuples))]
+    [tuples (strs-to-tuples (get-strs-by-owner-name db "" "auth" "list_list") [:name :value])]
     (into {} (map (fn [tuple] [(:name tuple) (:value tuple)]) (vals tuples)))))
 
 (defn get-list [db owner-id list-name]

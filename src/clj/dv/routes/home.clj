@@ -57,6 +57,13 @@
            (response/ok {:id item-id}))))
 
 
+  (GET "/pm_update_item" [auth-name list-name id name value :as request]
+       (if (nil? (get-current-auth-name request)) (response/ok {:data permission-denied})
+         (let [item-id (pm/update-list-item auth-name list-name id name value)
+               results {:id item-id}]
+
+           (response/ok {:id item-id}))))
+
   (GET "/auth_register" [auth-name password :as request]
        (let [base-url
              (str (-> request :scheme name)

@@ -18,6 +18,7 @@
  (fn [db [_ value-path val]]
    (update-in db value-path (constantly val))))
 
+
 (defn process-response [db [_ path response]]
   (-> db
       (assoc-in (conj path :loading?) false)
@@ -86,13 +87,36 @@
 
 (defn encrypt [vals k]
   (let [aes (dv.crypt/new-aes k)]
-    (map #(dv.crypt/byte-array-to-hex (dv.crypt/aes-encrypt-str aes %) true) vals)))
+    (map #(dv.crypt/byte-array-to-hex (dv.crypt/aes-encrypt-str aes % true) true) vals)))
 
 (defn decrypt [vals k]
   (let [aes (dv.crypt/new-aes k)]
     (map
      #(dv.crypt/byte-array-to-str (dv.crypt/aes-decrypt-bytes aes (dv.crypt/hex-to-byte-array % true) true) true)
      vals)))
+
+(reg-event-db
+ :process-pm-update-item-response
+ []
+ (fn [db [_ response]] db))
+
+(reg-event-fx
+ :pm-update-row
+ []
+ (fn [{:keys [db]} [_ [list-name id field] new-val]]
+   (let
+     [{:keys [id name value]} (get-in db [:pm :data :list id])
+      [new-name new-value] (if (= field :name) [new-val value] [name new-val])
+      [encoded-name encoded-val] (encrypt [new-name new-value] (get-in db [:pm :auth :password]))
+      encoded-new-row {:id id :name encoded-name :value encoded-val}]
+     {:http-xhrio {:method          :get
+                   :uri             "/pm_update_item"
+                   :params          (assoc encoded-new-row :list-name list-name :auth-name (get-in db [:pm :auth :auth-name]))
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success      [:process-pm-update-item-response]
+                   :on-failure      [nil]}
+      :db  (assoc-in db [:pm :data :list id field] new-val)})))
+
 
 (reg-event-fx
  :auth-register
@@ -155,16 +179,16 @@
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      [:dummy]
                    :on-failure      [:dummy]}
-      :db dv.db/default-db})))
+      :db (assoc db :page :pm :pm {})})))
 
 (defn decrypt-list [id-to-list k]
-              (let [entries (into [] id-to-list)
-                    decoded-entries (map
-                                     (fn [[id {:keys [name value]}]]
-                                       (let [[decoded-name decoded-value] (decrypt [name value] k)]
-                                         [id {:name (clojure.string/trim decoded-name) :value (clojure.string/trim decoded-value) :id id}]))
-                                     entries)]
-                (into {} (into [] decoded-entries))))
+  (let [entries (into [] id-to-list)
+        decoded-entries (map
+                         (fn [[_ {:keys [id name value]}]]
+                           (let [[decoded-name decoded-value] (decrypt [name value] k)]
+                             [id {:name (clojure.string/trim decoded-name) :value (clojure.string/trim decoded-value) :id id}]))
+                         entries)]
+    (into {} (into [] decoded-entries))))
 
 (reg-event-db
  :process-pm-list-response

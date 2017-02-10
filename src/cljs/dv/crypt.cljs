@@ -3,6 +3,7 @@
             [goog.crypt.Aes]
             [goog.crypt.Sha256]))
 
+(def block-size 16)
 
 (defn byte-array-to-hex [bs js?]
   (goog.crypt/byteArrayToHex (if js? bs (clj->js bs))))
@@ -25,11 +26,11 @@
         hash-bytes (.digest sha256)]
     (if js? hash-bytes (clj->js hash-bytes))))
 
-(defn- padding-js-bytes
+(defn padding-js-bytes
   [bs target-len padding-byte]
-  (let [mod-len (mod (count bs) target-len)]
-    (if (zero? mod-len) bs
-      (.concat bs (clj->js (repeat (- target-len mod-len) padding-byte))))))
+  (let [mod-len (mod (count bs) target-len)
+        padding-len (if (zero? mod-len) 0 (- target-len mod-len))]
+    (.concat bs (clj->js (repeat (- target-len mod-len) padding-byte)))))
 
 (defn new-aes [key-str]
   (let [
@@ -37,12 +38,20 @@
     (goog.crypt.Aes. hash-bytes)))
 
 (defn aes-encrypt-bytes [aes bytes js?]
-  (.encrypt aes (if js? bytes (clj->js bytes))))
+  (let [encrypted (.encrypt aes (if js? bytes (clj->js bytes)))]
+    (if js? encrypted (js->clj encrypted))))
 
-(defn aes-encrypt-str [aes ss]
+(defn aes-encrypt-str [aes ss js?]
   (let [js-bytes (str-to-byte-array ss true)
-        padded-bytes (padding-js-bytes js-bytes 16 32)]
-    (aes-encrypt-bytes aes padded-bytes true)))
+        padding-byte 32
+        padded-bytes (padding-js-bytes js-bytes block-size padding-byte)
+        partitioned (partition block-size (js->clj padded-bytes))
+        encoded-bytes (mapcat identity (map #(aes-encrypt-bytes aes % false) partitioned))]
+    (if js? (clj->js encoded-bytes) encoded-bytes)))
 
 (defn aes-decrypt-bytes [aes bytes js?]
-  (.decrypt aes (if js? bytes (clj->js bytes))))
+  (let [
+        cbytes (if js? (js->clj bytes) bytes)
+        partitioned (partition block-size cbytes)
+        decoded-bytes (mapcat identity (map #(.decrypt aes (clj->js %)) partitioned))]
+    (if js? (clj->js decoded-bytes) decoded-bytes)))

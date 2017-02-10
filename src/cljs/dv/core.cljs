@@ -159,9 +159,9 @@
 (defn pm-editable-row [item]
   [:div.row
    [:div.col-md-4
-    [text-input :update-value [[:pm :data :lists (:id item) :name]] "text" (:name item) nil]]
+    [text-input :pm-update-row [[nil (:id item) :name]] "text" (:name item) nil]]
    [:div.col-md-8
-    [text-input :update-value [[:pm :data :lists (:id item) :value]] "text" (:value item) nil]]])
+    [text-input :pm-update-row [[nil (:id item) :value]] "text" (:value item) nil]]])
 
 (defn pm-readonly-row [item]
   [:div.row
@@ -207,6 +207,7 @@
 (defn pm-page []
   (let [pm @(rf/subscribe [:pm])
         pm-auth (:auth pm)]
+    (print (str "pm:" pm))
     (cond
       (:login? pm-auth) [pm-data]
       (:registering? pm-auth) [pm-register pm-auth]
