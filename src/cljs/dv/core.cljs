@@ -207,7 +207,6 @@
 (defn pm-page []
   (let [pm @(rf/subscribe [:pm])
         pm-auth (:auth pm)]
-    (print (str "pm:" pm))
     (cond
       (:login? pm-auth) [pm-data]
       (:registering? pm-auth) [pm-register pm-auth]
