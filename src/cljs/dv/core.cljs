@@ -57,19 +57,21 @@
 
 
 
-(defn- text-input [event-id event-params input-type init-val props]
+(defn- text-input [event-id event-params input-type init-val save-on-change? props]
   (let [val (r/atom init-val)
         stop #(reset! val init-val)
-        save #(rf/dispatch (into [] (concat [event-id] event-params [@val])))]
+        save #(rf/dispatch (into [] (concat [event-id] event-params [(if (nil? %) @val %)])))
+        save-on-change #(rf/dispatch (into [] (concat [event-id] event-params [@val])))]
     [:input
       (merge
        {
         :type input-type
         :default-value init-val
-        :on-blur save
-        :on-change #(reset! val (-> % .-target .-value))
+        :on-blur (partial save nil)
+        :on-change #(let [new-val (-> % .-target .-value)]
+                      (if save-on-change? (save new-val) (reset! val new-val)))
         :on-key-down #(case (.-which %)
-                        13 (save)
+                        13 (save nil)
                         27 (stop)
                         nil)}
        props)]))
@@ -111,15 +113,15 @@
        (let
          [admin @(rf/subscribe [:admin])]
          [admin-page admin]))
-     [:div.row [:div.col-md-6 [:span "Settings:"]]]]))
+     [:div.row [:div.col-md-6 [:span "There are no settings"]]]]))
 
 (defn pm-login [pm-auth]
   [:div.container
    [:div.row [:div.col-md-2 "Email address: "]
-    [:div.col-md-6 [text-input :update-value [[:pm :auth :auth-name]] "text" (:auth-name pm-auth) nil]]]
+    [:div.col-md-6 [text-input :update-value [[:pm :auth :auth-name]] "text" (:auth-name pm-auth) false nil]]]
    [:div.row [:div.col-md-2 "Password: "]
     [:div.col-md-6
-     [text-input :update-value [[:pm :auth :password]] "password" (:password pm-auth) nil]]]
+     [text-input :update-value [[:pm :auth :password]] "password" (:password pm-auth) false nil]]]
    [:div.row
     [:div.col-md-2]
     [:div.col-md-6
@@ -138,7 +140,7 @@
     [:div.col-md-6 [text-input :update-value [[:pm :auth :auth-name]] "text" (:auth-name pm-auth) nil]]]
    [:div.row [:div.col-md-2 "Password: "]
     [:div.col-md-6
-     [text-input :update-value [[:pm :auth :password]] "password" (:password pm-auth) nil]]]
+     [text-input :update-value [[:pm :auth :password]] "password" (:password pm-auth) false nil]]]
    [:div.row
     [:div.col-md-2]
     [:div.col-md-6
@@ -159,9 +161,9 @@
 (defn pm-editable-row [item]
   [:div.row
    [:div.col-md-4
-    [text-input :pm-update-row [[nil (:id item) :name]] "text" (:name item) nil]]
+    [text-input :pm-update-row [[nil (:id item) :name]] "text" (:name item) false nil]]
    [:div.col-md-8
-    [text-input :pm-update-row [[nil (:id item) :value]] "text" (:value item) nil]]])
+    [text-input :pm-update-row [[nil (:id item) :value]] "text" (:value item) false nil]]])
 
 (defn pm-readonly-row [item]
   [:div.row
@@ -180,14 +182,14 @@
         new-row-name (get-in pm-data [:new-row :name])
         new-row-value (get-in pm-data [:new-row :value])
         add-row [:div.row
-                 [:div.col-md-5 "Name: " [text-input :update-value [[:pm :data :new-row :name]] "text" new-row-name nil]]
-                 [:div.col-md-5 "Value: " [text-input :update-value [[:pm :data :new-row :value]] "text" new-row-value nil]]
+                 [:div.col-md-5 "Name: " [text-input :update-value [[:pm :data :new-row :name]] "text" new-row-name false nil]]
+                 [:div.col-md-5 "Value: " [text-input :update-value [[:pm :data :new-row :value]] "text" new-row-value false nil]]
                  [:div.col-md-2
                   [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:pm-add-item nil]) :type "button" } "Add"]]]
         filter-str (:filter pm-data)
         editing-id (:editing-id pm-data)
         filter-row [:div.row>div.col-md-12 "Filter: "
-                    [text-input :update-value [[:pm :data :filter]] "text" filter-str nil]]
+                    [text-input :update-value [[:pm :data :filter]] "text" filter-str true nil]]
         pm-data-list (vals (:list pm-data))
         filtered-list (if (clojure.string/blank? filter-str)
                          pm-data-list
