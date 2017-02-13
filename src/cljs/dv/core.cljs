@@ -140,7 +140,12 @@
     [:div.col-md-6 [text-input :update-value [[:pm :auth :auth-name]] "text" (:auth-name pm-auth) nil]]]
    [:div.row [:div.col-md-2 "Password: "]
     [:div.col-md-6
-     [text-input :update-value [[:pm :auth :password]] "password" (:password pm-auth) false nil]]]
+     [text-input :update-value [[:pm :auth :password]] "password" (:password pm-auth) false
+      {:on-paste #(do)}]]]
+   [:div.row [:div.col-md-2 "Confirm Password: "]
+    [:div.col-md-6
+     [text-input :update-value [[:pm :auth :confirm-password]] "password" (:confirm-password pm-auth) false
+      {:on-paste #(do)}]]]
    [:div.row
     [:div.col-md-2]
     [:div.col-md-6
@@ -184,8 +189,8 @@
         add-row [:div.row
                  [:div.col-md-5 "Name: " [text-input :update-value [[:pm :data :new-row :name]] "text" new-row-name false nil]]
                  [:div.col-md-5 "Value: " [text-input :update-value [[:pm :data :new-row :value]] "text" new-row-value false nil]]
-                 [:div.col-md-2
-                  [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:pm-add-item nil]) :type "button" } "Add"]]]
+                 [:div.col-md-2]
+                 [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:pm-add-item nil]) :type "button" } "Add"]]
         filter-str (:filter pm-data)
         editing-id (:editing-id pm-data)
         filter-row [:div.row>div.col-md-12 "Filter: "

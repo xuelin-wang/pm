@@ -70,10 +70,11 @@
                                 "")))]
      {:db new-db})))
 
-(defn validate-auth [{:keys [auth-name password]}]
+(defn validate-auth [{:keys [auth-name password confirm-password]}]
   (cond
     (not (re-matches #"[^@]+@[^.]+\..+" auth-name)) "Please use a valid email address as your user name"
     (< (count password) 8) "Password length must be at least 8"
+    (not= password confirm-password) "Password doesn't match"
     :else nil))
 
 (defn hash-auth [auth]
@@ -131,7 +132,9 @@
                      :response-format (ajax/json-response-format {:keywords? true})
                      :on-success      [:process-register-response]
                      :on-failure      [:process-register-response]}
-        :db  (assoc-in db [:pm :auth :register :msg] "Registering, please wait...")}
+        :db  (-> db
+                 (assoc-in [:pm :auth :register :msg] "Registering, please wait...")
+                 (assoc-in [:pm :auth :register :error] nil))}
        {:db (assoc-in db [:pm :auth :register :error] msg)}))))
 
 (reg-event-fx
