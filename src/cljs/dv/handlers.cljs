@@ -7,17 +7,35 @@
             [clojure.string]
             [re-frame.core :refer [dispatch reg-event-db reg-event-fx]]))
 
+(defn clear-init [db] (assoc db :init {}))
+
 (reg-event-db
   :initialize-db
-  (fn [_ _]
-    dv.db/default-db))
+  []
+  (fn [_ [_ init-json]]
+    (let [register (get init-json "register")
+          msg-type (if (= register 0) :error :ok)
+          registering? (= register 0)
+          msg
+          (cond
+            (= register 1) "Congratulations! Your registration succeeded. Please login."
+            (= register 0) "Sorry, your registration has expired. Please register again."
+            :else nil)]
+      (-> dv.db/default-db
+          (merge {:init {:msg msg :msg-type msg-type}})
+          (assoc-in [:pm :auth :registering?] registering?)))))
 
 (reg-event-db
  :update-value
  []
  (fn [db [_ value-path val]]
-   (update-in db value-path (constantly val))))
+   (assoc-in db value-path val)))
 
+(reg-event-db
+ :update-values
+ []
+ (fn [db [_ path-values]]
+   (reduce (fn [db [path val]] (assoc-in db path val)) db (partition 2 path-values))))
 
 (defn process-response [db [_ path response]]
   (-> db
@@ -132,10 +150,10 @@
                      :response-format (ajax/json-response-format {:keywords? true})
                      :on-success      [:process-register-response]
                      :on-failure      [:process-register-response]}
-        :db  (-> db
+        :db  (-> (clear-init db)
                  (assoc-in [:pm :auth :register :msg] "Registering, please wait...")
                  (assoc-in [:pm :auth :register :error] nil))}
-       {:db (assoc-in db [:pm :auth :register :error] msg)}))))
+       {:db (assoc-in (clear-init db)  [:pm :auth :register :error] msg)}))))
 
 (reg-event-fx
  :process-login-response
@@ -143,9 +161,9 @@
  (fn [{:keys [db]} [_ response]]
    (let [data (:data response)
          login? (:login? data)
-         db1 (assoc-in db [:pm :auth :login :error]
-                       (if login? "" "Email address or password doesn't match"))
-         db2 (assoc-in db [:pm :auth] (merge (get-in db1 [:pm :auth]) data))]
+         db1 (-> (clear-init db)
+                 (assoc-in [:pm :auth :login :error] (if login? "" "Email address or password doesn't match")))
+         db2 (assoc-in db1 [:pm :auth] (merge (get-in db1 [:pm :auth]) data))]
 
      (if login?
        {:db db2

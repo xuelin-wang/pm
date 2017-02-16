@@ -30,3 +30,8 @@
   :pm-auth
   (fn [db _]
     (get-in db [:pm :auth])))
+
+(reg-sub
+  :init
+  (fn [db _]
+    (:init db)))

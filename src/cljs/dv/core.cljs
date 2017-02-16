@@ -6,6 +6,7 @@
             [goog.history.EventType :as HistoryEventType]
             [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]]
+            [clojure.string]
             [dv.ajax :refer [load-interceptors!]]
             [dv.commonutils :as commonutils]
             [dv.handlers]
@@ -234,6 +235,18 @@
 (defn page []
   [:div
    [navbar]
+   [:div.container
+    (let [init @(rf/subscribe [:init])]
+      (print (str "in page: " init))
+      (cond
+        (= (:msg-type init) :error)
+        [:div.row [:div.col-md-8 [:span.error (:msg init)]]]
+
+        (= (:msg-type init) :ok)
+        [:div.row [:div.col-md-8 [:span.message (:msg init)]]]
+
+        :else [:div]))]
+
    [(pages @(rf/subscribe [:page]))]])
 
 ;; -------------------------
@@ -244,7 +257,7 @@
   (rf/dispatch [:update-value [:page] :pm]))
 
 (secretary/defroute "/pm" []
-  (rf/dispatch [:update-value [:page] :pm]))
+  (rf/dispatch [:update-values [[:page] :pm]]))
 
 (secretary/defroute "/settings" []
   (rf/dispatch [:update-value [:page] :settings]))
@@ -270,7 +283,11 @@
   (r/render [#'page] (.getElementById js/document "app")))
 
 (defn init! []
-  (rf/dispatch-sync [:initialize-db])
+  (let [init-elem (.getElementById js/document "__init__")
+        init-str (if (nil? init-elem) "{}" (.-textContent init-elem))
+        init-json (if (clojure.string/blank? init-str) nil (js->clj (.parse js/JSON init-str)))]
+    (rf/dispatch-sync [:initialize-db init-json]))
+
   (load-interceptors!)
   (fetch-docs!)
   (hook-browser-navigation!)

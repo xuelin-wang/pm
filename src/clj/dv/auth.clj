@@ -34,5 +34,4 @@
   (let [
         db (db/db-conn)
         check-result (db/check-auth-registration db auth-id confirm)]
-
     check-result))

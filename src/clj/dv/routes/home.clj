@@ -10,8 +10,13 @@
             [cheshire.core :as json]
             [clojure.java.io :as io]))
 
-(defn home-page []
-  (layout/render "home.html"))
+(defn get-base-url [request]
+  (str (-> request :scheme name)
+       "://"
+       (get-in request [:headers "host"])))
+
+(defn home-page [init]
+  (layout/render "home.html" {:init init}))
 
 (defn get-current-auth-name [request]
   (get-in request [:session :auth-name]))
@@ -20,7 +25,11 @@
 
 (defroutes home-routes
   (GET "/" []
-       (home-page))
+       (home-page nil))
+  (GET "/register_ok" []
+       (home-page "{\"register\":1}"))
+  (GET "/register_fail" []
+       (home-page "{\"register\":0}"))
   (GET "/graphql" [schema query variables :as request]
        (println "GET query: " query)
        (response/ok
@@ -65,18 +74,16 @@
            (response/ok {:id item-id}))))
 
   (GET "/auth_register" [auth-name password :as request]
-       (let [base-url
-             (str (-> request :scheme name)
-                  "://"
-                  (get-in request [:headers "host"]))
+       (let [base-url (get-base-url request)
              results {:data (auth/register auth-name password base-url)}]
          (let [resp (response/ok results)] resp)))
 
   (GET "/auth_confirm_registration" [auth-id confirm :as request]
        (let [
-             results {:data (auth/confirm-registration auth-id confirm)}]
-         (let [resp (response/ok results)] resp)))
-
+             results (auth/confirm-registration auth-id confirm)]
+         {:status 302
+          :headers {"Location" (if (nil? results) "/register_fail" "/register_ok")}
+          :body ""}))
 
   (GET "/auth_login" [auth-name password :as request]
        (let [results {:data (auth/login auth-name password)}]

@@ -6,7 +6,9 @@
       <title>Welcome to Utight!</title>
   </head>
   <body>
-
+    {% if init %}
+    <span id="__init__" style="display:none">{{init}}</span>
+    {% endif %}
     <div id="app">
       <div class="container-fluid">
         <div class="card-deck">
