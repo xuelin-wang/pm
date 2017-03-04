@@ -73,9 +73,9 @@
 
            (response/ok {:id item-id}))))
 
-  (GET "/auth_register" [auth-name password :as request]
+  (GET "/auth_register" [auth-name nonce password :as request]
        (let [base-url (get-base-url request)
-             results {:data (auth/register auth-name password base-url)}]
+             results {:data (auth/register auth-name nonce password base-url)}]
          (let [resp (response/ok results)] resp)))
 
   (GET "/auth_confirm_registration" [auth-id confirm :as request]
@@ -88,6 +88,12 @@
   (GET "/auth_login" [auth-name password :as request]
        (let [results {:data (auth/login auth-name password)}]
          (let [resp (response/ok results)] (assoc resp :session {:auth-name auth-name}))))
+
+
+  (GET "/auth_nonce" [auth-name :as request]
+   (let [nonce (auth/nonce auth-name)]
+     (response/ok {:nonce nonce})))
+
 
   (GET "/auth_logout" [auth-name :as request]
        (let [results {:data (auth/logout auth-name)}]

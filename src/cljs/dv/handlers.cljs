@@ -95,13 +95,21 @@
     (not= password confirm-password) "Password doesn't match"
     :else nil))
 
-(defn hash-auth [auth]
-  {:auth-name (:auth-name auth) :password
-   (-> (:password auth)
-       (dv.crypt/str-to-byte-array true)
-       (dv.crypt/byte-array-to-hash256 true)
-       (dv.crypt/byte-array-to-hash256 true)
-       (dv.crypt/byte-array-to-hex true))})
+(defn hash-auth [auth nonce]
+  (let [pw (:password auth)
+        _ (assert (= 32 (count nonce)))
+        salted-pw (str nonce pw)
+        ]
+    {:auth-name (:auth-name auth)
+     :nonce nonce
+     :password
+                (-> salted-pw
+                    (dv.crypt/str-to-byte-array true)
+                    (dv.crypt/byte-array-to-hash256 true)
+                    (dv.crypt/byte-array-to-hash256 true)
+                    (dv.crypt/byte-array-to-hex true))}
+    )
+)
 
 
 (defn encrypt [vals k]
@@ -146,7 +154,7 @@
      (if (nil? msg)
        {:http-xhrio {:method          :get
                      :uri             "/auth_register"
-                     :params          (hash-auth auth)
+                     :params          (hash-auth auth  (dv.crypt/new-uuid))
                      :response-format (ajax/json-response-format {:keywords? true})
                      :on-success      [:process-register-response]
                      :on-failure      [:process-register-response]}
@@ -171,17 +179,34 @@
        {:db db2}))))
 
 (reg-event-fx
- :auth-login
+ :process-nonce-response
  []
- (fn [{:keys [db]} [_]]
+ (fn [{:keys [db]} [_ response]]
    (let
-     [auth (get-in db [:pm :auth])]
+     [nonce (:nonce response)
+      auth (get-in db [:pm :auth])]
      {:http-xhrio {:method          :get
                    :uri             "/auth_login"
-                   :params          (hash-auth auth)
+                   :params          (hash-auth auth nonce)
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      [:process-login-response]
-                   :on-failure      [:process-login-response]}})))
+                   :on-failure      [:process-login-response]}
+      }
+     )))
+
+(reg-event-fx
+  :auth-login
+  []
+  (fn [{:keys [db]} [_]]
+    (let
+      [auth (get-in db [:pm :auth])]
+      {:http-xhrio {:method          :get
+                    :uri             "/auth_nonce"
+                    :params          {:auth-name (:auth-name auth)}
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :on-success      [:process-nonce-response]
+                    :on-failure      [:process-nonce-response]}
+       })))
 
 (reg-event-db
  :dummy

@@ -237,7 +237,6 @@
    [navbar]
    [:div.container
     (let [init @(rf/subscribe [:init])]
-      (print (str "in page: " init))
       (cond
         (= (:msg-type init) :error)
         [:div.row [:div.col-md-8 [:span.error (:msg init)]]]

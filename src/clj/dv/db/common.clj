@@ -111,6 +111,7 @@
         (doall (map (fn [sql] (j/execute! db [sql]))
                     ["insert into enc (enc_id, enc_name, notes) values (1, 'test', 'test')"
                      (str insert-strs-meta-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'admin-enc', 1, 0, 'admin-enc')")
+                     (str insert-strs-meta-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'nonce', 1, 0, 'nonce')")
                      (str insert-strs-meta-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'password', 1, 0, 'password')")
                      (str insert-strs-meta-sql-0 " ('" (dv.utils/new-uuid) "', 'auth', 'encryption', 10, 0, 'encryption')")
                      (str insert-strs-meta-sql-0 " ('" list-list-strs-id "', 'auth', 'list_list', 1000, 1, 'list list')")
@@ -119,10 +120,9 @@
                      (str insert-strs-sql-0 " ('', '" list-list-strs-id "', 2, 'admin' )")
                      (str insert-strs-sql-0 " ('', '" list-list-strs-id "', 3, '" (dv.utils/new-uuid) "' )")]))))))
 
-
 (defn migrate []
   (let [db (db-conn)]
-;;    (drop-schemas db)
+    (drop-schemas db)
     (when-not (has-table? db "auth") (create-schema-auth db))
     (when-not (has-table? db "enc") (create-schema-enc db))
     (when-not (has-table? db "strs_meta") (create-schema-strs-meta db))
@@ -148,6 +148,7 @@
   (:strs_id (get-strs-meta db owner-type strs-name)))
 
 (defn- get-password-strs-id [db] (get-strs-id db "auth" "password"))
+(defn- get-nonce-strs-id [db] (get-strs-id db "auth" "nonce"))
 
 (defn- get-strs [db owner-id strs-id]
   {:pre [(s/valid? string? owner-id) (s/valid? string? strs-id)]}
@@ -226,6 +227,13 @@
             found-pw (:str (first strs))]
         (= password found-pw)))))
 
+(defn nonce [db auth-name]
+  {:pre [(s/valid? string? auth-name)]}
+  (let [auth-id (:auth_id (first (get-auths db 1 auth-name)))
+        strs (get-strs-by-owner-name db auth-id "auth" "nonce")
+        nonce (:str (first strs))]
+    nonce))
+
 (defn- save-strs [db owner-id strs-id strs]
   {:pre [(s/valid? string? owner-id) (s/valid? string? strs-id)]}
   (j/execute! db ["delete from strs where owner_id = ? and  strs_id = ?" owner-id strs-id])
@@ -240,7 +248,7 @@
   (let [curr-auths (j/query db ["select * from auth where verified = 1 and auth_name = ?" auth-name])]
     (seq curr-auths)))
 
-(defn add-auth [db auth-name password verified]
+(defn add-auth [db auth-name nonce password verified]
   {:pre [(s/valid? string? auth-name) (s/valid? string? password)]}
   (if (exists-auth? db auth-name)
     nil
@@ -248,8 +256,10 @@
           uuid (dv.utils/new-uuid)
           curr-millis (System/currentTimeMillis)
           confirm (dv.crypt/aes-encrypt (dv.crypt/new-aes uuid) (str curr-millis))
+          nonce-strs-id (get-nonce-strs-id db)
           pw-strs-id (get-password-strs-id db)]
       (j/insert! db :auth {:auth_id uuid :verified verified :auth_name auth-name})
+      (save-strs db uuid nonce-strs-id [nonce])
       (save-strs db uuid pw-strs-id [password])
       {:auth-id uuid :confirm confirm})))
 
