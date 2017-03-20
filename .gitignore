@@ -1,4 +1,3 @@
-/.idea
 /target
 /lib
 /classes
@@ -10,6 +9,6 @@ figwheel_server.log
 /.lein-*
 profiles.clj
 /.env
-/.idea
+.idea/
 .nrepl-port
 /log
