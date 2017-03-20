@@ -1,6 +1,8 @@
 (ns dv.pm
   (:require
-   [dv.db.common :as db]
+   [dv.db.common :refer [db-conn]]
+   [dv.db.lists :refer [get-list get-list-list]]
+   [dv.db.strs :refer [append-strs update-strs]]
    [clojure.string]
    [dv.crypt]
    [clojure.spec :as s]))
@@ -9,20 +11,20 @@
   (if (clojure.string/blank? list-name0) "default" list-name0))
 
 (defn update-list-item [auth-name list-name0 id name value]
-  (let [db (db/db-conn)
+  (let [db (db-conn)
         list-name (get-list-name "auth" list-name0)
-        list-list (db/get-list-list db)
+        list-list (get-list-list db)
         list-id (get list-list list-name)]
-    (db/update-strs db auth-name list-id id [name value])))
+    (update-strs db auth-name list-id id [name value])))
 
 (defn add-item-to-list [auth-name list-name0 name value]
-  (let [db (db/db-conn)
+  (let [db (db-conn)
         list-name (get-list-name "auth" list-name0)
-        list-list (db/get-list-list db)
+        list-list (get-list-list db)
         list-id (get list-list list-name)]
-    (db/append-strs db auth-name list-id [name value])))
+    (append-strs db auth-name list-id [name value])))
 
-(defn get-list [auth-name list-name0]
-  (let [db (db/db-conn)
+(defn get-pm-list [auth-name list-name0]
+  (let [db (db-conn)
         list-name (get-list-name "auth" list-name0)]
-    (db/get-list db auth-name list-name)))
+    (get-list db auth-name list-name)))

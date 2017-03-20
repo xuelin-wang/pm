@@ -55,7 +55,7 @@
        (let [results
              (if (nil? (get-current-auth-name request))
                {:data permission-denied}
-               {:data (pm/get-list auth-name list-name)})]
+               {:data (pm/get-pm-list auth-name list-name)})]
          (response/ok results)))
 
   (GET "/pm_add_item" [auth-name list-name name value :as request]

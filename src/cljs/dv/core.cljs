@@ -188,10 +188,15 @@
         new-row-name (get-in pm-data [:new-row :name])
         new-row-value (get-in pm-data [:new-row :value])
         add-row [:div.row
-                 [:div.col-md-5 "Name: " [text-input :update-value [[:pm :data :new-row :name]] "text" new-row-name false nil]]
-                 [:div.col-md-5 "Value: " [text-input :update-value [[:pm :data :new-row :value]] "text" new-row-value false nil]]
-                 [:div.col-md-2]
-                 [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:pm-add-item nil]) :type "button" } "Add"]]
+                 [:div.col-md-1 "Name: "
+                  ]
+                 [:div.col-md-5 [text-input :update-value [[:pm :data :new-row :name]] "text" new-row-name false {:size 30}]
+                  [:br]
+                  [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:pm-add-item nil]) :type "button" } "Add New Item"]
+                  ]
+                 [:div.col-md-1 "Value: "]
+                 [:div.col-md-5 [textarea-input :update-value [[:pm :data :new-row :value]] new-row-value {:rows 3 :cols 30}]]
+                 ]
         filter-str (:filter pm-data)
         editing-id (:editing-id pm-data)
         filter-row [:div.row>div.col-md-12 "Filter: "
@@ -210,7 +215,7 @@
               (fn [item]
                 [pm-row item (= (:id item) editing-id)])
               (sort-by :name filtered-list))]
-    (into [] (concat [:div.container add-row filter-row] rows))))
+    (into [] (concat [:div.container add-row [:hr] filter-row] rows))))
 
 (defn pm-page []
   (let [pm @(rf/subscribe [:pm])
