@@ -7,6 +7,7 @@
             [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]]
             [clojure.string]
+            [dv.utils :refer [new-window to-csv]]
             [dv.ajax :refer [load-interceptors!]]
             [dv.commonutils :as commonutils]
             [dv.handlers]
@@ -187,12 +188,17 @@
   (let [pm-data @(rf/subscribe [:pm-data])
         new-row-name (get-in pm-data [:new-row :name])
         new-row-value (get-in pm-data [:new-row :value])
+        pm-data-list (vals (:list pm-data))
         add-row [:div.row
                  [:div.col-md-1 "Name: "
                   ]
                  [:div.col-md-5 [text-input :update-value [[:pm :data :new-row :name]] "text" new-row-name false {:size 30}]
                   [:br]
                   [:button.btn.btn-default.btn-sm {:on-click #(rf/dispatch [:pm-add-item nil]) :type "button" } "Add New Item"]
+                  [:br]
+                  [:button.btn.btn-default.btn-sm
+                   {:on-click #(new-window "" (to-csv pm-data-list [:id :name :value] name)) :type "button" } "Export"]
+
                   ]
                  [:div.col-md-1 "Value: "]
                  [:div.col-md-5 [textarea-input :update-value [[:pm :data :new-row :value]] new-row-value {:rows 3 :cols 30}]]
@@ -201,7 +207,6 @@
         editing-id (:editing-id pm-data)
         filter-row [:div.row>div.col-md-12 "Filter: "
                     [text-input :update-value [[:pm :data :filter]] "text" filter-str true nil]]
-        pm-data-list (vals (:list pm-data))
         filtered-list (if (clojure.string/blank? filter-str)
                          pm-data-list
                          (filter (fn [nv]

@@ -28,3 +28,10 @@
   (let [db (db-conn)
         list-name (get-list-name "auth" list-name0)]
     (get-list db auth-name list-name)))
+
+(defn exportcsv-pm-list [auth-name list-name0]
+  (let [db (db-conn)
+        list-name (get-list-name "auth" list-name0)
+        tuples (get-list db auth-name list-name)
+        ]
+    (str tuples)))

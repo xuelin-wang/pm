@@ -58,7 +58,18 @@
                {:data (pm/get-pm-list auth-name list-name)})]
          (response/ok results)))
 
-  (GET "/pm_add_item" [auth-name list-name name value :as request]
+   (GET "/pm_exportcsv_list" [auth-name list-name :as request]
+     (let [results
+           (if (nil? (get-current-auth-name request))
+             (throw (RuntimeException. permission-denied))
+             (pm/get-pm-list auth-name list-name))
+           ]
+       (response/ok results)
+       (-> (response/ok results)
+           (response/header "Content-Type" "text/plain; charset=utf-8"))
+       ))
+
+           (GET "/pm_add_item" [auth-name list-name name value :as request]
        (if (nil? (get-current-auth-name request)) (response/ok {:data permission-denied})
          (let [item-id (pm/add-item-to-list auth-name list-name name value)
                results {:id item-id}]
